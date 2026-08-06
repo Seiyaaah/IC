@@ -5,10 +5,10 @@ window.reviewerData = {
     {
       id: "subject_ict",
       name: "Information and Communications Technology",
-      description: "Comprehensive guide covering computer hardware, software, Excel functions, the history and evolution of ICT, computer characteristics, and real-world applications.",
+      description: "Comprehensive guide covering computer hardware, software, Excel functions, the history and evolution of ICT, computer characteristics, and real-world applications across multiple sources.",
       icon: "cpu",
       color: "blue",
-      tags: ["ICT", "Computer Hardware", "Software", "History", "Excel"],
+      tags: ["ICT", "Computer Hardware", "Software", "History", "Excel", "Applications"],
       lessons: [
         {
           id: "lesson_computer_hardware",
@@ -27,85 +27,53 @@ window.reviewerData = {
               text: "Hardware devices accept input (data and instructions) from the user or from another computer system. They are categorized into input devices, system units, output devices, storage devices, and communication devices."
             },
             {
-              type: "heading",
-              text: "Input Devices"
-            },
-            {
-              type: "paragraph",
-              text: "Input devices allow users to enter data and commands into the computer."
+              type: "definition",
+              title: "Input Devices",
+              text: "Devices that accept input (data and instructions) from the user or from another computer system."
             },
             {
               type: "list",
               ordered: false,
               items: [
-                "Keyboard: Similar to a typewriter with special buttons or keys. Parts include Alphanumeric Keypad, Numeric Keypad (numbers 0-9 and mathematical keys +, -, *, / used for cursor movement, editing, and calculating), Special Keys (arrows, Page Up, Page Down, Home, End, Insert, Delete, Print Screen, Scroll Lock, Pause/Break), Enter Key, Backspace Key (erases characters to the left one by one), and Status Lights (upper right corner indicating Num Lock, Caps Lock, or Scroll Lock activation).",
-                "Mouse: A box-like input device with a long wire that controls cursor/pointer movement. Functions include Pointing, Clicking, Double Clicking, Dragging, and Right Clicking.",
-                "Trackball: A stationary mouse lying on its back where you rotate a ball with your thumb, fingers, or palm.",
-                "Light Pen: Utilizes a light-sensitive detector to select objects on a display screen directly.",
-                "Touch Screen: A display screen with a touch-sensitive transparent panel covering it.",
-                "Touch Tablet: Used by designers, engineers, and artists for drawing or designing.",
-                "Barcode Reader: Uses light rays to read product codes for inventory and monitoring.",
+                "Keyboard: Similar to a typewriter with special keys to enter data and commands.",
+                "Mouse: A box-like input device connected via wire to control cursor movement.",
+                "Trackball: An input device featuring a movable ball for pointer control.",
+                "Light Pen: Uses a light-sensitive detector to select objects directly on a screen.",
+                "Barcode Reader: Uses light rays to read product codes for easy inventory.",
                 "Wand Reader: Uses laser beams to read special numbers, letters, or symbols.",
-                "Scanner: Reads text or illustrations printed on paper and translates them into digital form.",
-                "Digital Camera: Captures snapshots of real images and stores bit patterns on digital storage.",
+                "Scanner: Reads text or illustrations on paper and translates them into digital form.",
                 "Audio Digitizer: Contains circuitry to digitize sounds from microphones into computer memory.",
-                "Sensing Devices: Designed specifically to monitor temperature, pressure, and humidity for research, robotics, medical monitoring, and weather forecasting."
+                "Sensing Devices: Designed to monitor temperature, pressure, and humidity in research and monitoring."
               ]
             },
             {
               type: "heading",
-              text: "System Unit"
+              text: "System Unit and Internal Components"
             },
             {
               type: "paragraph",
-              text: "The system unit is the electronic circuitry housed within the computer where processing happens."
+              text: "The system unit is the electronic circuitry housed within the computer where processing happens. It includes external parts like power switches, casings, LEDs, and ports, as well as internal components such as the CPU, motherboard, expansion cards, storage drives, and power supply."
             },
             {
               type: "list",
               ordered: false,
               items: [
-                "External Parts: Power Switch (switches computer on/off), Reset Switch (restarts computer without turning it off when it hangs), Casing (shell/cover protecting internal parts), LED (Light Emitting Diode lights in front), Ports (holes at the back for data transfer).",
-                "Internal Parts - CPU: The microprocessor acts as the heart or brain carrying out instructions. Main parts include Arithmetic Logic Unit (ALU - performs arithmetic and logic operations), Control Unit (CU - directs entire operation, fetches, decodes, executes, and stores information), and Registers (small data holding places for passing data).",
-                "Internal Parts - Cards & Motherboard: Cards include Sound Card, Video Card, Network Card, Game Card, and Memory Card. The Motherboard is the main circuit board containing CPU, memory, and ports.",
-                "System Board Components: Port, Memory Slot, Chipsets, Cache Memory (high-speed buffer storage), Jumpers, Processor Socket, and BIOS (Basic Input/Output System) chip.",
-                "Other Internal Parts: Hard Disk, Power Supply, Fan, Speaker, and Memory."
+                "Microprocessor or CPU: The heart or brain carrying out user and software instructions.",
+                "Arithmetic Logic Unit (ALU): Performs arithmetic (add, subtract, multiply, divide) and logic/comparison operations.",
+                "Control Unit (CU): Directs the entire operation of the CPU, handling fetching, decoding, executing, and storing information.",
+                "Registers: Small data holding places in the microprocessor for passing data between instructions.",
+                "Motherboard: Main circuit board holding the CPU, memory, and communication slots.",
+                "BIOS Chip: Acts as an interface between hardware and OS, booting up the machine and handling hardware settings.",
+                "CMOS Chip: Holds the real-time clock and BIOS settings, powered by a built-in battery when off."
               ]
             },
             {
               type: "heading",
-              text: "Output Devices"
+              text: "Output and Storage Devices"
             },
             {
               type: "paragraph",
-              text: "Output devices translate and represent processed information into human-readable forms."
-            },
-            {
-              type: "list",
-              ordered: false,
-              items: [
-                "Monitor: Resembles a television screen. Main classes include CRT (uses small picture elements called pixels; larger size and high power consumption) and Flat-Panel Display Monitor (reduced volume, weight, and power). Types by color include Monochrome, Gray-Scale, and Color (RGB monitor).",
-                "Printer (Print Device): Produces printed output on paper. Kinds of print devices include Ink-jet Printer (sprays ink) and Laser Printer (uses laser beam and rotating drum). Types by size include 80 Column Paper printer and 132 Column Paper printer. Types by speed include 9 Pin Serial Printer and 24 Pin Parallel Printer.",
-                "Speaker: Changes electrical signals into audible sound.",
-                "Plotter: Used in scientific and engineering applications for scaled drawings.",
-                "Synthesizers: Designed to generate sounds electronically for music or noise."
-              ]
-            },
-            {
-              type: "heading",
-              text: "Storage and Communication Devices"
-            },
-            {
-              type: "paragraph",
-              text: "Storage devices hold data and information for orderly retrieval. They perform reading and writing functions."
-            },
-            {
-              type: "list",
-              ordered: false,
-              items: [
-                "Primary Storage (Main Storage): Temporary area including ROM (Read Only Memory / Permanent Memory) and RAM (Random Access Memory / Temporary Memory).",
-                "Four Main Types of Storage: Magnetic (Floppy disk drive, Hard disk drive, Zip disk drive, Tape drive), Optical (CD-ROM drive, DVD-ROM drive), Magneto-Optical (CD-R drive, CD-RW drive), and Solid-state Electronic (Memory Cards, Compact Flash, Smart Media, Memory Stick).",
-                "Communication Devices: Devices used to transfer information between functional units via data transmission protocols, such as Network Interface Card (NIC) and Modem (Internal Modem)."
-              ]
+              text: "Output devices translate and represent processed information into human-readable forms, such as monitors and printers. Storage devices are categorized into primary storage (RAM and ROM) and secondary storage (magnetic, optical, magneto-optical, and solid-state)."
             }
           ],
           flashcards: [
@@ -116,54 +84,21 @@ window.reviewerData = {
             },
             {
               id: "fc_hw_002",
-              front: "What are the main parts of the CPU?",
-              back: "Arithmetic Logic Unit (ALU), Control Unit (CU), and Registers."
+              front: "What does the Arithmetic Logic Unit (ALU) do?",
+              back: "It carries out arithmetic operations (addition, subtraction, multiplication, division) and logic/comparison operations."
             },
             {
               id: "fc_hw_003",
-              front: "What is the difference between RAM and ROM?",
-              back: "RAM is temporary/volatile memory that gets erased when the computer turns off, while ROM is permanent memory containing essential instructions that cannot be changed."
+              front: "What is the function of the CMOS chip?",
+              back: "It holds the real-time clock (date and time) and BIOS settings, powered by a built-in battery when the computer is off."
             },
             {
               id: "fc_hw_004",
-              front: "What does a Scanner do?",
-              back: "It reads text or illustrations printed on paper and translates them into a digital form that the computer can use."
-            },
-            {
-              id: "fc_hw_005",
-              front: "What is the function of the BIOS chip?",
-              back: "It acts as an interface between hardware and the operating system, controls hardware settings, and boots up the machine."
+              front: "What is the difference between RAM and ROM?",
+              back: "ROM is permanent memory containing essential startup instructions that cannot be changed, whereas RAM is temporary memory erased when the computer is turned off."
             }
           ],
           questions: [
-            {
-              type: "multiple_choice",
-              question: "Which component of the CPU is responsible for carrying out arithmetic operations such as addition and subtraction?",
-              choices: [
-                "Control Unit",
-                "Arithmetic Logic Unit (ALU)",
-                "Registers",
-                "BIOS Chip"
-              ],
-              answer: 1,
-              explanation: "The Arithmetic Logic Unit (ALU) carries out arithmetic operations (addition, subtraction, multiplication, division) and logic/comparison operations.",
-              difficulty: "easy",
-              tags: ["cpu", "hardware"]
-            },
-            {
-              type: "multiple_choice",
-              question: "Which type of memory is known as permanent memory because its instructions cannot be changed?",
-              choices: [
-                "RAM",
-                "Cache Memory",
-                "ROM",
-                "Registers"
-              ],
-              answer: 2,
-              explanation: "ROM (Read Only Memory) contains important instructions that the computer needs for basic operation and cannot be changed or lost upon power off.",
-              difficulty: "easy",
-              tags: ["memory", "storage"]
-            },
             {
               type: "identification",
               question: "What key is pressed to erase the character on the left side of the cursor one by one?",
@@ -171,6 +106,38 @@ window.reviewerData = {
               explanation: "The Backspace Key deletes characters to the left of the current cursor position.",
               difficulty: "easy",
               tags: ["keyboard"]
+            },
+            {
+              type: "identification",
+              question: "What device is used in scientific and engineering applications to produce scaled drawings finely and appropriately?",
+              answer: "Plotter",
+              explanation: "A plotter is an output device specialized for high-precision scaled drawings in engineering and architecture.",
+              difficulty: "medium",
+              tags: ["output", "hardware"]
+            },
+            {
+              type: "true_false",
+              question: "Modified True or False: Reading is the process of transferring items from memory to a storage medium.",
+              answer: false,
+              explanation: "False. Reading transfers data from a storage medium into memory, whereas writing transfers data from memory to a storage medium.",
+              difficulty: "medium",
+              tags: ["storage"]
+            },
+            {
+              type: "true_false",
+              question: "Modified True or False: The Control Unit is responsible for fetching, decoding, executing, and storing information or instructions within the CPU.",
+              answer: true,
+              explanation: "True. The Control Unit directs the entire operation of the CPU including fetching and executing instructions.",
+              difficulty: "medium",
+              tags: ["cpu"]
+            },
+            {
+              type: "identification",
+              question: "What hardware component acts as the heart or brain of the computer, carrying out instructions from either the user or software?",
+              answer: "Microprocessor or Central Processing Unit",
+              explanation: "The CPU or microprocessor processes instructions and manages operations.",
+              difficulty: "easy",
+              tags: ["cpu"]
             }
           ]
         },
@@ -188,21 +155,15 @@ window.reviewerData = {
             },
             {
               type: "paragraph",
-              text: "Software consists of a set of instructions that tells the computer what to do and perform specific tasks. It is tangible and intangible (specifically, software is the intangible set of instructions)."
-            },
-            {
-              type: "heading",
-              text: "Types of Software"
+              text: "Software consists of a set of instructions that tells the computer what to do and perform specific tasks. It is classified into system software and application software, with categories like productivity, multimedia, entertainment, and personal use."
             },
             {
               type: "list",
               ordered: false,
               items: [
-                "Application Software: Productivity Software (Word processing like MS Word and Google Docs, Excel spreadsheet software, Presentation software like MS PowerPoint and Slides), Multimedia (Video editing, Image editing like Photoshop and Canva, Sound editing like Audacity), Web page software, Entertainment, and Personal software.",
-                "System Software: Manages fundamental computer operations.",
-                "Freeware: Software that is free to use (e.g., Facebook, Instagram).",
-                "Shareware: Software that you can use for a limited time only (e.g., Canva trials).",
-                "Beta Version: Software still under development (e.g., game deployments).",
+                "Freeware: Software that is free to use indefinitely.",
+                "Shareware: Software that you can use for a limited time only before purchasing.",
+                "Beta Version: Software that is still under development and testing.",
                 "Open Source: Software that can be used and downloaded freely on the internet."
               ]
             },
@@ -211,15 +172,19 @@ window.reviewerData = {
               text: "Basic Excel Functions"
             },
             {
+              type: "paragraph",
+              text: "Microsoft Excel formulas and functions enable automated mathematical calculations using cell references, commas, and colons."
+            },
+            {
               type: "list",
               ordered: false,
               items: [
-                "SUM(): Adds values or specified cells. Syntax: =SUM(number1, number2). Uses comma (,) for shortcuts or colon (:) for ranges.",
-                "PRODUCT(): Multiplies values of specified cells. Syntax: =PRODUCT(number1, number2).",
-                "QUOTIENT(): Returns the integer portion of a division. Only two cell values can be used. Syntax: =QUOTIENT(number1, number2).",
-                "MOD(): Returns the remainder after a number is divided by a divisor. Only two cell values can be used. Syntax: =MOD(number1, number2).",
-                "MIN(): Returns the smallest number in a set of values, ignoring logical values and text. Syntax: =MIN(number1, number2).",
-                "MAX(): Returns the largest number in a set of values, ignoring logical values and text. Syntax: =MAX(number1, number2)."
+                "SUM(): Adds values or specified cells using commas or colons.",
+                "PRODUCT(): Multiplies values of specified cells.",
+                "QUOTIENT(): Returns the integer portion of a division using strictly two cell values.",
+                "MOD(): Returns the remainder after a number is divided by a divisor using two cell values.",
+                "MIN(): Returns the smallest number in a set of values, ignoring text and logical values.",
+                "MAX(): Returns the largest number in a set of values, ignoring text and logical values."
               ]
             }
           ],
@@ -231,37 +196,47 @@ window.reviewerData = {
             },
             {
               id: "fc_sw_002",
-              front: "What is the syntax for the SUM function in Excel?",
-              back: "=SUM(number1, number2) where you can use a comma (,) or colon (:)."
+              front: "What is a Beta Version?",
+              back: "Software that is still currently under development and testing before official release."
             },
             {
               id: "fc_sw_003",
-              front: "How many cell values can be used in the QUOTIENT function?",
-              back: "Only two cell values can be used."
+              front: "What are the rules for using QUOTIENT() in Excel?",
+              back: "It returns the integer portion of a division and accepts strictly two cell values separated by a comma."
             }
           ],
           questions: [
             {
-              type: "multiple_choice",
-              question: "Which Excel function returns the remainder after a number is divided by a divisor?",
-              choices: [
-                "QUOTIENT()",
-                "MOD()",
-                "PRODUCT()",
-                "SUM()"
-              ],
-              answer: 1,
-              explanation: "The MOD() function returns the remainder after a number is divided by a divisor using two cell values.",
+              type: "true_false",
+              question: "Modified True or False: Freeware is software that you can only use for a limited time before payment.",
+              answer: false,
+              explanation: "False. Freeware is free to use indefinitely, whereas shareware is limited by time or trials.",
               difficulty: "easy",
+              tags: ["software"]
+            },
+            {
+              type: "identification",
+              question: "What term describes software that is still currently under development, such as a game trial or test release?",
+              answer: "Beta Version",
+              explanation: "A beta version refers to software in its testing and development stage before final release.",
+              difficulty: "easy",
+              tags: ["software"]
+            },
+            {
+              type: "identification",
+              question: "Which Excel function returns the integer portion of a division using strictly two cell values?",
+              answer: "QUOTIENT()",
+              explanation: "The QUOTIENT() function returns the integer portion of a division and accepts only two cell values.",
+              difficulty: "medium",
               tags: ["excel", "functions"]
             },
             {
               type: "true_false",
-              question: "Freeware is software that you can only use for a limited time before payment.",
-              answer: false,
-              explanation: "Freeware is free to use indefinitely, whereas shareware is limited by time or trials.",
+              question: "Modified True or False: The MOD() function in Excel returns the remainder after a number is divided by a divisor.",
+              answer: true,
+              explanation: "True. MOD() returns the mathematical remainder using two cell values.",
               difficulty: "easy",
-              tags: ["software"]
+              tags: ["excel", "functions"]
             }
           ]
         },
@@ -275,24 +250,20 @@ window.reviewerData = {
           content: [
             {
               type: "heading",
-              text: "Definition of ICT"
+              text: "Definition and Periods of ICT"
             },
             {
               type: "paragraph",
-              text: "Information and Communications Technology (ICT) refers to technologies, both hardware and software, through which humans are able to communicate with one another."
-            },
-            {
-              type: "heading",
-              text: "Four Main Historical Periods of ICT"
+              text: "Information and Communications Technology (ICT) refers to technologies, both hardware and software, through which humans communicate. Its evolution is divided into four main historical periods: Premechanical, Mechanical, Electromechanical, and Electronic."
             },
             {
               type: "list",
-              ordered: false,
+              ordered: true,
               items: [
-                "1. The Premechanical Period (3,000 BCE to 1,450 CE): Humans wrote symbols as substitutes. Papyrus plant revolutionized paper storage, making libraries the first data centers. The Abacus was introduced in the 2nd Century BCE by Romans/China as the first counting and information-processing device.",
-                "2. The Mechanical Period (1450 - 1840): Concentrated on enhancement of calculation speed. Key inventions include the Pascaline (mechanical calculator by Blaise Pascal and Wilhelm Schickard) and the Analytical Engine (invented by Charles Babbage in 1837, earning him the title 'Father of the Computers' with ALU, control flow, and integrated memory).",
-                "3. The Electromechanical Period (1840 - 1940): Ushered in electrical communications. The telegraph (invented in 1837 by William Cooke and Sir Charles Wheatstone) used electric current across five magnetic needles. Samuel Morse invented the single-circuit telegraph and Morse Code in 1844. Alexander Graham Bell patented the telephone in 1876. Alan Turing and Gordon Welchman invented The Bombe in 1939-1940 to decipher encrypted codes during WWII.",
-                "4. The Electronic Period (1940s to Present): Focused on solid-state devices. Key milestones include ENIAC (first electronic general purpose computer occupying 167 square meters), the Transistor (invented in 1947, lightweight and fast), the Integrated Circuit (IC - group of transistors compressed in a single package), Olivetti Programma 101 (first commercial personal computer in 1965), and the IBM 5150 (released in August 1981, setting standard PC platforms)."
+                "Premechanical Period (3,000 BCE to 1,450 CE): Introduction of papyrus, libraries as data centers, and the Abacus.",
+                "Mechanical Period (1450 to 1840): Focus on calculating machines such as Pascaline and Charles Babbage's Analytical Engine.",
+                "Electromechanical Period (1840 to 1940): Invention of the telegraph, Morse code, telephone, and Alan Turing's Bombe.",
+                "Electronic Period (1940s to Present): Advent of ENIAC, transistors, integrated circuits, and personal computers."
               ]
             },
             {
@@ -301,32 +272,7 @@ window.reviewerData = {
             },
             {
               type: "paragraph",
-              text: "The World Wide Web (WWW) was proposed by Tim Berners-Lee in 1989 to access hypertext documents and files over the internet."
-            },
-            {
-              type: "list",
-              ordered: false,
-              items: [
-                "Web 1.0 (Read-only Web): Information or hypertext files are accessed by users.",
-                "Web 2.0 (Read-and-write Web): Introduced user interaction, emailing websites, and social networking sites.",
-                "Web 3.0 (Semantic executing Web): Smarter access to hypertext files with wider and faster search capabilities.",
-                "Social Media: Applications starting with Web 2.0 used for communicating and socializing in virtual communities. Virality is defined as the rate of reposting or sharing of photos, information, or ideas."
-              ]
-            },
-            {
-              type: "heading",
-              text: "Computer Characteristics and Applications"
-            },
-            {
-              type: "paragraph",
-              text: "Computers perform four main functions: Input, Process, Output, and Store. Their characteristics include Speed, Memory, Diligence, Versatility, and Accuracy."
-            },
-            {
-              type: "list",
-              ordered: false,
-              items: [
-                "Applications include Engineering & Architecture, Education, Government, The Home, Health and Medicine, Manufacturing Industries, Connectivity (assisting disabled individuals), Scientific Research, Communication with the World, and Paperwork reduction."
-              ]
+              text: "Proposed by Tim Berners-Lee in 1989, the World Wide Web evolved from Web 1.0 (read-only) to Web 2.0 (read-and-write with social media and user interaction) and Web 3.0 (semantic/executing web). Social media introduced concepts like virality, measuring how quickly content spreads."
             }
           ],
           flashcards: [
@@ -337,49 +283,16 @@ window.reviewerData = {
             },
             {
               id: "fc_hist_002",
-              front: "What was the first commercial personal computer sold in 1965?",
-              back: "Olivetti Programma 101"
+              front: "What was ENIAC?",
+              back: "Electronic Numerical Integrator and Computer; the first electronic and general-purpose computer that occupied 167 square meters."
             },
             {
               id: "fc_hist_003",
-              front: "Who proposed the World Wide Web in 1989?",
-              back: "Tim Berners-Lee"
-            },
-            {
-              id: "fc_hist_004",
-              front: "What is the difference between Web 1.0, Web 2.0, and Web 3.0?",
-              back: "Web 1.0 is read-only, Web 2.0 is read-and-write (interactive/social), and Web 3.0 is the semantic executing web for smarter and faster searches."
+              front: "What is the difference between Web 1.0 and Web 2.0?",
+              back: "Web 1.0 is the read-only web, whereas Web 2.0 is the read-and-write web that introduced user interaction and social networking."
             }
           ],
           questions: [
-            {
-              type: "multiple_choice",
-              question: "Who invented the Analytical Engine in 1837, earning the title 'Father of the Computers'?",
-              choices: [
-                "Blaise Pascal",
-                "Charles Babbage",
-                "Tim Berners-Lee",
-                "Alan Turing"
-              ],
-              answer: 1,
-              explanation: "Charles Babbage invented the Analytical Engine, featuring an ALU, control flow, and integrated memory.",
-              difficulty: "easy",
-              tags: ["history", "ict"]
-            },
-            {
-              type: "multiple_choice",
-              question: "Which web era introduced user interaction, email integration, and social networking?",
-              choices: [
-                "Web 1.0",
-                "Web 2.0",
-                "Web 3.0",
-                "Web 4.0"
-              ],
-              answer: 1,
-              explanation: "Web 2.0 is the read-and-write web that enabled user interaction and social networking.",
-              difficulty: "medium",
-              tags: ["www", "history"]
-            },
             {
               type: "identification",
               question: "What term is defined as the rate of reposting or sharing of photos, pieces of information, or ideas published on a social media profile page?",
@@ -387,6 +300,101 @@ window.reviewerData = {
               explanation: "Virality measures how quickly content spreads across social media networks through sharing and reposting.",
               difficulty: "medium",
               tags: ["social media"]
+            },
+            {
+              type: "true_false",
+              question: "Modified True or False: ENIAC was the first electronic and general-purpose computer that occupied 167 square meters.",
+              answer: true,
+              explanation: "True. ENIAC occupied 167 square meters and marked a milestone in the electronic period.",
+              difficulty: "easy",
+              tags: ["history", "electronic"]
+            },
+            {
+              type: "identification",
+              question: "Which machine was invented by Alan Turing and Gordon Welchman to decipher encrypted German codes during World War II?",
+              answer: "The Bombe",
+              explanation: "The Bombe was an electromechanical device created during WWII to break Enigma-encrypted messages.",
+              difficulty: "hard",
+              tags: ["history", "electromechanical"]
+            },
+            {
+              type: "true_false",
+              question: "Modified True or False: Web 1.0 is known as the read-and-write web that introduced user interaction and social networking.",
+              answer: false,
+              explanation: "False. Web 1.0 is the read-only web, whereas Web 2.0 is the read-and-write web that introduced user interaction.",
+              difficulty: "medium",
+              tags: ["www", "history"]
+            }
+          ]
+        },
+        {
+          id: "lesson_computer_characteristics_and_applications",
+          title: "Computer Characteristics, Functions, and Real-World Applications",
+          description: "Examining core computer functions (Input, Process, Output, Store), unique characteristics like speed and diligence, and domain-specific applications.",
+          difficulty: "medium",
+          estimatedTime: "25 mins",
+          tags: ["characteristics", "functions", "applications", "computer science"],
+          content: [
+            {
+              type: "heading",
+              text: "Core Computer Functions"
+            },
+            {
+              type: "paragraph",
+              text: "Computers execute four fundamental operations: Input (accepting words, symbols, numbers, sound, or pictures), Process (calculating, sorting, or modifying data via CPU), Output (delivering results like reports or graphs via printer/monitor), and Storage (holding temporary data in RAM or permanent data on disk)."
+            },
+            {
+              type: "heading",
+              text: "Characteristics of a Computer"
+            },
+            {
+              type: "list",
+              ordered: false,
+              items: [
+                "Speed: Capable of executing billions of operations per second far exceeding human capability.",
+                "Memory: Can store and recall vast amounts of information without forgetting unless instructed.",
+                "Diligence: Free from tiredness, lack of concentration, and fatigue during long tasks.",
+                "Versatility: Adaptable to easily handle diverse subjects, occupations, and processing tasks.",
+                "Accuracy: Operates with extreme precision; errors are typically due to human programmer weakness or incorrect data."
+              ]
+            },
+            {
+              type: "heading",
+              text: "Real-World Applications"
+            },
+            {
+              type: "paragraph",
+              text: "Computers impact numerous fields including Government (weather forecasting, tax collection), Home (personal budgeting, communication), Health and Medicine (monitoring ICU patients), Manufacturing Industries (handling dangerous tasks), Connectivity (assisting disabled users), and Scientific Research."
+            }
+          ],
+          flashcards: [
+            {
+              id: "fc_app_001",
+              front: "What are the four core functions of a computer?",
+              back: "Input, Process, Output, and Store."
+            },
+            {
+              id: "fc_app_002",
+              front: "Why do errors occur in computer processing according to computer characteristics?",
+              back: "Errors are mainly due to human weakness (imprecise thinking by the programmer or incorrect data) rather than technological failure."
+            }
+          ],
+          questions: [
+            {
+              type: "true_false",
+              question: "Modified True or False: Computer errors are primarily caused by hardware failure rather than human or programmer weakness.",
+              answer: false,
+              explanation: "False. Errors in a computer are mainly due to human weakness, such as imprecise thinking by the programmer or incorrect input data.",
+              difficulty: "easy",
+              tags: ["characteristics"]
+            },
+            {
+              type: "identification",
+              question: "What computer characteristic describes its freedom from tiredness, lack of concentration, and fatigue?",
+              answer: "Diligence",
+              explanation: "Diligence means a computer can perform repetitive tasks continuously without getting tired or losing concentration.",
+              difficulty: "medium",
+              tags: ["characteristics"]
             }
           ]
         }
