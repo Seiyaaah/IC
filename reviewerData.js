@@ -1,430 +1,392 @@
 window.reviewerData = {
-  appName: "IT-PSI Presentation Skills Learning OS",
+  appName: "Learning OS Reviewer",
   version: "3.2",
   subjects: [
     {
-      id: "subject_it_psi",
-      name: "Information Technology Presentation Skills (IT-PSI)",
-      description: "Comprehensive educational data covering Study Group 1 (Communication Defined) and Study Group 2 (Effective Communication Skills and the 7 C's).",
-      icon: "bi-chat-square-text",
-      color: "primary",
-      tags: ["IT-PSI", "Communication", "Management", "7Cs"],
+      id: "subject_ict",
+      name: "Information and Communications Technology",
+      description: "Comprehensive guide covering computer hardware, software, Excel functions, the history and evolution of ICT, computer characteristics, and real-world applications.",
+      icon: "cpu",
+      color: "blue",
+      tags: ["ICT", "Computer Hardware", "Software", "History", "Excel"],
       lessons: [
         {
-          id: "lesson_sg1_definition",
-          title: "SG1: Etymology and Core Definitions of Communication",
-          description: "Covers the Latin origins, core concepts, the Golden Rule, and foundational author definitions of communication.",
-          difficulty: "easy",
-          estimatedTime: "10 mins",
-          tags: ["Etymology", "Communis", "Definitions", "T.S. Mathews", "Peter Little"],
+          id: "lesson_computer_hardware",
+          title: "The Basics of Computer Hardware",
+          description: "An overview of input devices, system units, internal components, output devices, storage devices, and communication devices.",
+          difficulty: "medium",
+          estimatedTime: "30 mins",
+          tags: ["hardware", "input", "output", "storage", "system unit"],
           content: [
             {
               type: "heading",
-              text: "Etymology & Core Concept of Communication"
+              text: "Introduction to Computer Hardware"
             },
             {
               type: "paragraph",
-              text: "The word communication has been derived from the Latin word 'communis' that means 'common'. However, communication incorporates, besides commonality, the concepts of transfer, meaning and information."
-            },
-            {
-              type: "definition",
-              title: "The Golden Rule of Communication",
-              text: "\"You cannot not communicate\" - This statement is quite often misunderstood by many of us. We may be fussy about the grammar of this sentence and that is at the cost of its spirit."
-            },
-            {
-              type: "definition",
-              title: "General Definition",
-              text: "Communication can be defined as the process through which two or more persons come to exchange ideas and understanding among them."
+              text: "Hardware devices accept input (data and instructions) from the user or from another computer system. They are categorized into input devices, system units, output devices, storage devices, and communication devices."
             },
             {
               type: "heading",
-              text: "Core Definitions by Key Authors"
+              text: "Input Devices"
             },
             {
-              type: "definition",
-              title: "T.S. Mathews",
-              text: "\"Communication is something so simple and difficult that we can never put it in simple words.\""
-            },
-            {
-              type: "definition",
-              title: "Peter Little",
-              text: "“Communication is the process by which information is transmitted between individuals and / or organizations so that an understanding response results.”"
-            },
-            {
-              type: "definition",
-              title: "W.H. Newman and C.F. Summer Jr.",
-              text: "“Communication is an exchange of facts, ideas, opinions, or emotions by two or more persons.”"
-            }
-          ],
-          flashcards: [
-            {
-              id: "fc_sg1_001",
-              front: "What Latin word is communication derived from, and what does it mean?",
-              back: "Derived from 'communis', which means 'common'."
-            },
-            {
-              id: "fc_sg1_002",
-              front: "What famous statement about communication is often misunderstood due to grammar?",
-              back: "\"You cannot not communicate\""
-            },
-            {
-              id: "fc_sg1_003",
-              front: "Who stated: 'Communication is something so simple and difficult that we can never put it in simple words'?",
-              back: "T.S. Mathews"
-            },
-            {
-              id: "fc_sg1_004",
-              front: "Who defined communication as the process by which information is transmitted so that 'an understanding response results'?",
-              back: "Peter Little"
-            },
-            {
-              id: "fc_sg1_005",
-              front: "Who defined communication as an 'exchange of facts, ideas, opinions, or emotions by two or more persons'?",
-              back: "W.H. Newman and C.F. Summer Jr."
-            }
-          ],
-          questions: [
-            {
-              id: "q_sg1_001",
-              type: "multiple_choice",
-              question: "The word communication is derived from which Latin word?",
-              choices: [
-                "communis",
-                "communicare",
-                "informatio",
-                "societas"
-              ],
-              answer: 0,
-              explanation: "Communication is derived from the Latin word 'communis', meaning 'common'.",
-              difficulty: "easy",
-              tags: ["Etymology"]
-            },
-            {
-              id: "q_sg1_002",
-              type: "multiple_choice",
-              question: "Who authored the quote: 'Communication is something so simple and difficult that we can never put it in simple words'?",
-              choices: [
-                "Peter Little",
-                "T.S. Mathews",
-                "W.H. Newman",
-                "C.F. Summer Jr."
-              ],
-              answer: 1,
-              explanation: "T.S. Mathews provided this specific reflection on the complexity of communication.",
-              difficulty: "medium",
-              tags: ["Authors"]
-            },
-            {
-              id: "q_sg1_003",
-              type: "multiple_choice",
-              question: "According to Peter Little, what is the ultimate result of information transmission in communication?",
-              choices: [
-                "A written document",
-                "An understanding response",
-                "Increased revenue",
-                "Data storage"
-              ],
-              answer: 1,
-              explanation: "Peter Little's definition explicitly ends with 'so that an understanding response results.'",
-              difficulty: "medium",
-              tags: ["Definitions"]
-            }
-          ]
-        },
-        {
-          id: "lesson_sg1_aspects_importance",
-          title: "SG1: Two Aspects & Importance of Communication in Management",
-          description: "Explores transmission vs understanding, communication as the lifeblood of business, and managerial functions.",
-          difficulty: "medium",
-          estimatedTime: "15 mins",
-          tags: ["Transmission", "Management", "Decision Making", "Control"],
-          content: [
-            {
-              type: "heading",
-              text: "Two Aspects in Communication"
+              type: "paragraph",
+              text: "Input devices allow users to enter data and commands into the computer."
             },
             {
               type: "list",
               ordered: false,
               items: [
-                "Transmission: Something is transmitted (facts, feelings, ideas, etc.), implying there must be a receiver for communication to occur.",
-                "Understanding: Sharing of understanding is only possible when the receiver understands the message in the exact same sense intended by the sender."
+                "Keyboard: Similar to a typewriter with special buttons or keys. Parts include Alphanumeric Keypad, Numeric Keypad (numbers 0-9 and mathematical keys +, -, *, / used for cursor movement, editing, and calculating), Special Keys (arrows, Page Up, Page Down, Home, End, Insert, Delete, Print Screen, Scroll Lock, Pause/Break), Enter Key, Backspace Key (erases characters to the left one by one), and Status Lights (upper right corner indicating Num Lock, Caps Lock, or Scroll Lock activation).",
+                "Mouse: A box-like input device with a long wire that controls cursor/pointer movement. Functions include Pointing, Clicking, Double Clicking, Dragging, and Right Clicking.",
+                "Trackball: A stationary mouse lying on its back where you rotate a ball with your thumb, fingers, or palm.",
+                "Light Pen: Utilizes a light-sensitive detector to select objects on a display screen directly.",
+                "Touch Screen: A display screen with a touch-sensitive transparent panel covering it.",
+                "Touch Tablet: Used by designers, engineers, and artists for drawing or designing.",
+                "Barcode Reader: Uses light rays to read product codes for inventory and monitoring.",
+                "Wand Reader: Uses laser beams to read special numbers, letters, or symbols.",
+                "Scanner: Reads text or illustrations printed on paper and translates them into digital form.",
+                "Digital Camera: Captures snapshots of real images and stores bit patterns on digital storage.",
+                "Audio Digitizer: Contains circuitry to digitize sounds from microphones into computer memory.",
+                "Sensing Devices: Designed specifically to monitor temperature, pressure, and humidity for research, robotics, medical monitoring, and weather forecasting."
               ]
             },
             {
               type: "heading",
-              text: "Importance of Communication in Management"
+              text: "System Unit"
             },
             {
-              type: "quote",
-              text: "\"Communication is as important to the organization as blood is to the body. Good communication is the foundation of sound management.\""
+              type: "paragraph",
+              text: "The system unit is the electronic circuitry housed within the computer where processing happens."
             },
             {
               type: "list",
               ordered: false,
               items: [
-                "Basis of decision making: Information needed for decisions is collected entirely through communication.",
-                "Cooperation and coordination: Builds mutual trust and confidence between employers and employees.",
-                "Effective control: Managers receive performance feedback to correct irregularities in a timely manner.",
-                "Basis of motivation: Helps influence subordinates' viewpoints and raise morale.",
-                "Establishment of effective leadership: Leadership cannot be imagined without effective communication."
+                "External Parts: Power Switch (switches computer on/off), Reset Switch (restarts computer without turning it off when it hangs), Casing (shell/cover protecting internal parts), LED (Light Emitting Diode lights in front), Ports (holes at the back for data transfer).",
+                "Internal Parts - CPU: The microprocessor acts as the heart or brain carrying out instructions. Main parts include Arithmetic Logic Unit (ALU - performs arithmetic and logic operations), Control Unit (CU - directs entire operation, fetches, decodes, executes, and stores information), and Registers (small data holding places for passing data).",
+                "Internal Parts - Cards & Motherboard: Cards include Sound Card, Video Card, Network Card, Game Card, and Memory Card. The Motherboard is the main circuit board containing CPU, memory, and ports.",
+                "System Board Components: Port, Memory Slot, Chipsets, Cache Memory (high-speed buffer storage), Jumpers, Processor Socket, and BIOS (Basic Input/Output System) chip.",
+                "Other Internal Parts: Hard Disk, Power Supply, Fan, Speaker, and Memory."
+              ]
+            },
+            {
+              type: "heading",
+              text: "Output Devices"
+            },
+            {
+              type: "paragraph",
+              text: "Output devices translate and represent processed information into human-readable forms."
+            },
+            {
+              type: "list",
+              ordered: false,
+              items: [
+                "Monitor: Resembles a television screen. Main classes include CRT (uses small picture elements called pixels; larger size and high power consumption) and Flat-Panel Display Monitor (reduced volume, weight, and power). Types by color include Monochrome, Gray-Scale, and Color (RGB monitor).",
+                "Printer (Print Device): Produces printed output on paper. Kinds of print devices include Ink-jet Printer (sprays ink) and Laser Printer (uses laser beam and rotating drum). Types by size include 80 Column Paper printer and 132 Column Paper printer. Types by speed include 9 Pin Serial Printer and 24 Pin Parallel Printer.",
+                "Speaker: Changes electrical signals into audible sound.",
+                "Plotter: Used in scientific and engineering applications for scaled drawings.",
+                "Synthesizers: Designed to generate sounds electronically for music or noise."
+              ]
+            },
+            {
+              type: "heading",
+              text: "Storage and Communication Devices"
+            },
+            {
+              type: "paragraph",
+              text: "Storage devices hold data and information for orderly retrieval. They perform reading and writing functions."
+            },
+            {
+              type: "list",
+              ordered: false,
+              items: [
+                "Primary Storage (Main Storage): Temporary area including ROM (Read Only Memory / Permanent Memory) and RAM (Random Access Memory / Temporary Memory).",
+                "Four Main Types of Storage: Magnetic (Floppy disk drive, Hard disk drive, Zip disk drive, Tape drive), Optical (CD-ROM drive, DVD-ROM drive), Magneto-Optical (CD-R drive, CD-RW drive), and Solid-state Electronic (Memory Cards, Compact Flash, Smart Media, Memory Stick).",
+                "Communication Devices: Devices used to transfer information between functional units via data transmission protocols, such as Network Interface Card (NIC) and Modem (Internal Modem)."
               ]
             }
           ],
           flashcards: [
             {
-              id: "fc_sg1_006",
-              front: "What are the two crucial aspects required for communication to occur?",
-              back: "1. Transmission (of facts, feelings, ideas to a receiver)\n2. Understanding (receiver understands in the sender's intended sense)."
+              id: "fc_hw_001",
+              front: "What is the function of the Numeric Keypad on a keyboard?",
+              back: "It has keys numbered 0 to 9 and mathematical keys (+, -, *, /) used in three ways: cursor movement, editing, and calculating."
             },
             {
-              id: "fc_sg1_007",
-              front: "What metaphor describes the importance of communication to an organization?",
-              back: "\"Communication is as important to the organization as blood is to the body.\""
+              id: "fc_hw_002",
+              front: "What are the main parts of the CPU?",
+              back: "Arithmetic Logic Unit (ALU), Control Unit (CU), and Registers."
             },
             {
-              id: "fc_sg1_008",
-              front: "How does communication assist managers with control?",
-              back: "It provides information about work performance so managers can correct irregularities well in time."
+              id: "fc_hw_003",
+              front: "What is the difference between RAM and ROM?",
+              back: "RAM is temporary/volatile memory that gets erased when the computer turns off, while ROM is permanent memory containing essential instructions that cannot be changed."
+            },
+            {
+              id: "fc_hw_004",
+              front: "What does a Scanner do?",
+              back: "It reads text or illustrations printed on paper and translates them into a digital form that the computer can use."
+            },
+            {
+              id: "fc_hw_005",
+              front: "What is the function of the BIOS chip?",
+              back: "It acts as an interface between hardware and the operating system, controls hardware settings, and boots up the machine."
             }
           ],
           questions: [
             {
-              id: "q_sg1_004",
               type: "multiple_choice",
-              question: "Which managerial function relies on communication to provide feedback on work performance so irregularities can be corrected?",
+              question: "Which component of the CPU is responsible for carrying out arithmetic operations such as addition and subtraction?",
               choices: [
-                "Basis of Motivation",
-                "Effective Control",
-                "Effective Leadership",
-                "Decision Making"
+                "Control Unit",
+                "Arithmetic Logic Unit (ALU)",
+                "Registers",
+                "BIOS Chip"
               ],
               answer: 1,
-              explanation: "Effective control allows managers to receive performance data and correct irregularities in time.",
-              difficulty: "medium",
-              tags: ["Management"]
-            },
-            {
-              id: "q_sg1_005",
-              type: "true_false",
-              question: "True or False: Communication can occur successfully even if the receiver interprets the message in a completely different sense than intended.",
-              choices: [
-                "True",
-                "False"
-              ],
-              answer: 1,
-              explanation: "False. Understanding requires the receiver to understand the message in the exact same sense intended by the sender.",
+              explanation: "The Arithmetic Logic Unit (ALU) carries out arithmetic operations (addition, subtraction, multiplication, division) and logic/comparison operations.",
               difficulty: "easy",
-              tags: ["Aspects"]
-            }
-          ]
-        },
-        {
-          id: "lesson_sg1_channels_categories",
-          title: "SG1: Internal, External, and 3 Categories of Communication",
-          description: "Covers internal/external channels and the three structural communication categories.",
-          difficulty: "medium",
-          estimatedTime: "12 mins",
-          tags: ["Internal", "External", "Operational", "Personal"],
-          content: [
-            {
-              type: "heading",
-              text: "Internal vs. External Communication"
+              tags: ["cpu", "hardware"]
             },
             {
-              type: "paragraph",
-              text: "Effective internal communication is crucial because businesses have grown in size, activities have become extremely complex, and it promotes understanding and cooperation."
-            },
-            {
-              type: "paragraph",
-              text: "External communication includes interaction with government agencies and departments, distributors, retailers, individual customers, and the general public."
-            },
-            {
-              type: "heading",
-              text: "3 Categories of Communication"
-            },
-            {
-              type: "definition",
-              title: "Internal - Operational Communication",
-              text: "It consists of structured communication within the organization that directly relates to achieving the organization's work goals."
-            },
-            {
-              type: "definition",
-              title: "External - Operational Communication",
-              text: "Part of an organization's structured communication concerned with achieving the organization's work goals that is conducted with people and groups outside the organization."
-            },
-            {
-              type: "definition",
-              title: "Personal Communication",
-              text: "Personal communication is all the incidental exchange of information and feelings in which human beings engage whenever they come together."
-            }
-          ],
-          flashcards: [
-            {
-              id: "fc_sg1_009",
-              front: "What are the three structural categories of communication in business?",
-              back: "1. Internal-Operational Communication\n2. External-Operational Communication\n3. Personal Communication"
-            },
-            {
-              id: "fc_sg1_010",
-              front: "How is Personal Communication defined in organizational context?",
-              back: "All the incidental exchange of information and feelings in which human beings engage whenever they come together."
-            }
-          ],
-          questions: [
-            {
-              id: "q_sg1_006",
               type: "multiple_choice",
-              question: "Which communication category refers to the incidental exchange of information and feelings between people?",
+              question: "Which type of memory is known as permanent memory because its instructions cannot be changed?",
               choices: [
-                "Internal-Operational Communication",
-                "External-Operational Communication",
-                "Personal Communication",
-                "External-Public Communication"
+                "RAM",
+                "Cache Memory",
+                "ROM",
+                "Registers"
               ],
               answer: 2,
-              explanation: "Personal communication is defined as the incidental exchange of information and feelings.",
+              explanation: "ROM (Read Only Memory) contains important instructions that the computer needs for basic operation and cannot be changed or lost upon power off.",
               difficulty: "easy",
-              tags: ["Categories"]
+              tags: ["memory", "storage"]
+            },
+            {
+              type: "identification",
+              question: "What key is pressed to erase the character on the left side of the cursor one by one?",
+              answer: "Backspace Key",
+              explanation: "The Backspace Key deletes characters to the left of the current cursor position.",
+              difficulty: "easy",
+              tags: ["keyboard"]
             }
           ]
         },
         {
-          id: "lesson_sg2_objectives_7cs",
-          title: "SG2: Objectives & The 7 C's of Effective Communication",
-          description: "Covers communication objectives and the foundational 7 C's principles for influencing target audiences.",
+          id: "lesson_software_and_excel",
+          title: "Software and Basic Excel Functions",
+          description: "Understanding types of software, software classifications, and fundamental Microsoft Excel formulas.",
           difficulty: "medium",
-          estimatedTime: "20 mins",
-          tags: ["Objectives", "7Cs", "Completeness", "Conciseness", "Consideration", "Concreteness", "Clarity", "Courtesy", "Correctness"],
+          estimatedTime: "25 mins",
+          tags: ["software", "excel", "functions"],
           content: [
             {
               type: "heading",
-              text: "Objectives of Communication"
+              text: "Introduction to Software"
             },
             {
               type: "paragraph",
-              text: "The objective of communication may be defined as the passing of ideas and understanding from the sender to the target with the view to getting the desired behavioral response from the latter."
-            },
-            {
-              type: "note",
-              text: "Finding out actual behavioral responses and comparing these with expected ones, however, presents insurmountable difficulties in this continuously ongoing process."
+              text: "Software consists of a set of instructions that tells the computer what to do and perform specific tasks. It is tangible and intangible (specifically, software is the intangible set of instructions)."
             },
             {
               type: "heading",
-              text: "The 7 C's of Effective Communication"
+              text: "Types of Software"
             },
             {
-              type: "paragraph",
-              text: "The 7 C's of communication are principles explained to effectively communicate so that the targeted group may understand the intended purpose, offering guidelines to influence people with organizational agendas."
+              type: "list",
+              ordered: false,
+              items: [
+                "Application Software: Productivity Software (Word processing like MS Word and Google Docs, Excel spreadsheet software, Presentation software like MS PowerPoint and Slides), Multimedia (Video editing, Image editing like Photoshop and Canva, Sound editing like Audacity), Web page software, Entertainment, and Personal software.",
+                "System Software: Manages fundamental computer operations.",
+                "Freeware: Software that is free to use (e.g., Facebook, Instagram).",
+                "Shareware: Software that you can use for a limited time only (e.g., Canva trials).",
+                "Beta Version: Software still under development (e.g., game deployments).",
+                "Open Source: Software that can be used and downloaded freely on the internet."
+              ]
             },
             {
-              type: "definition",
-              title: "1. Completeness",
-              text: "Refers to communication between sender and receiver when all relevant information has been sent after analyzing the receiver's mindset, ensuring no necessary information is missed."
+              type: "heading",
+              text: "Basic Excel Functions"
             },
             {
-              type: "definition",
-              title: "2. Conciseness",
-              text: "The use of accurate information in short sentences during interaction. Providing concise useful information is regarded as effective with positive audience response."
-            },
-            {
-              type: "definition",
-              title: "3. Consideration",
-              text: "Refers to communication where the advantage of the receiver is given due attention by respecting their mental perception and awareness, focusing on needs and thoughts with a positive approach."
-            },
-            {
-              type: "definition",
-              title: "4. Concreteness",
-              text: "Refers to specifics where interaction is performed with preciseness or by referring to statistics, creating a pronounced effect compared to general talks."
-            },
-            {
-              type: "definition",
-              title: "5. Clarity",
-              text: "Endeavor to transfer thoughts and ideas into the mind of the receiver effectively using a simple, precise, and easy set of words to express the purpose."
-            },
-            {
-              type: "definition",
-              title: "6. Courtesy",
-              text: "Polite words playing a prominent role in resolving disputes, understanding the receiver's mentality and feelings to create a lasting effect despite differing opinions."
-            },
-            {
-              type: "definition",
-              title: "7. Correctness",
-              text: "Refers to the factual accuracy of words used in verbal and non-verbal communication, selecting correct words at the right time."
+              type: "list",
+              ordered: false,
+              items: [
+                "SUM(): Adds values or specified cells. Syntax: =SUM(number1, number2). Uses comma (,) for shortcuts or colon (:) for ranges.",
+                "PRODUCT(): Multiplies values of specified cells. Syntax: =PRODUCT(number1, number2).",
+                "QUOTIENT(): Returns the integer portion of a division. Only two cell values can be used. Syntax: =QUOTIENT(number1, number2).",
+                "MOD(): Returns the remainder after a number is divided by a divisor. Only two cell values can be used. Syntax: =MOD(number1, number2).",
+                "MIN(): Returns the smallest number in a set of values, ignoring logical values and text. Syntax: =MIN(number1, number2).",
+                "MAX(): Returns the largest number in a set of values, ignoring logical values and text. Syntax: =MAX(number1, number2)."
+              ]
             }
           ],
           flashcards: [
             {
-              id: "fc_sg2_001",
-              front: "What are the 7 C's of Effective Communication?",
-              back: "1. Completeness\n2. Conciseness\n3. Consideration\n4. Concreteness\n5. Clarity\n6. Courtesy\n7. Correctness"
+              id: "fc_sw_001",
+              front: "What is Shareware?",
+              back: "Software that you can use for a limited time only before purchasing or registering."
             },
             {
-              id: "fc_sg2_002",
-              front: "Which 'C' refers to ensuring no necessary information is missed after analyzing the receiver's mindset?",
-              back: "Completeness"
+              id: "fc_sw_002",
+              front: "What is the syntax for the SUM function in Excel?",
+              back: "=SUM(number1, number2) where you can use a comma (,) or colon (:)."
             },
             {
-              id: "fc_sg2_003",
-              front: "Which 'C' emphasizes using specifics, preciseness, or statistics rather than general talk?",
-              back: "Concreteness"
-            },
-            {
-              id: "fc_sg2_004",
-              front: "Which 'C' involves respecting the mental perception, needs, and thoughts of the receiver?",
-              back: "Consideration"
-            },
-            {
-              id: "fc_sg2_005",
-              front: "Which 'C' focuses on factual accuracy and selecting the right words at the right time?",
-              back: "Correctness"
+              id: "fc_sw_003",
+              front: "How many cell values can be used in the QUOTIENT function?",
+              back: "Only two cell values can be used."
             }
           ],
           questions: [
             {
-              id: "q_sg2_001",
               type: "multiple_choice",
-              question: "Which of the 7 C's involves communicating with specifics or statistics to create a pronounced effect?",
+              question: "Which Excel function returns the remainder after a number is divided by a divisor?",
               choices: [
-                "Clarity",
-                "Concreteness",
-                "Conciseness",
-                "Completeness"
+                "QUOTIENT()",
+                "MOD()",
+                "PRODUCT()",
+                "SUM()"
               ],
               answer: 1,
-              explanation: "Concreteness relies on specifics and statistics rather than general talk.",
-              difficulty: "medium",
-              tags: ["7Cs"]
-            },
-            {
-              id: "q_sg2_002",
-              type: "multiple_choice",
-              question: "Which principle of the 7 C's emphasizes that 'no necessary information is missed'?",
-              choices: [
-                "Completeness",
-                "Courtesy",
-                "Consideration",
-                "Correctness"
-              ],
-              answer: 0,
-              explanation: "Completeness ensures all relevant information is sent without missing necessary details.",
+              explanation: "The MOD() function returns the remainder after a number is divided by a divisor using two cell values.",
               difficulty: "easy",
-              tags: ["7Cs"]
+              tags: ["excel", "functions"]
             },
             {
-              id: "q_sg2_003",
+              type: "true_false",
+              question: "Freeware is software that you can only use for a limited time before payment.",
+              answer: false,
+              explanation: "Freeware is free to use indefinitely, whereas shareware is limited by time or trials.",
+              difficulty: "easy",
+              tags: ["software"]
+            }
+          ]
+        },
+        {
+          id: "lesson_evolution_of_ict",
+          title: "Evolution of ICT and the World Wide Web",
+          description: "Exploring the historical periods of ICT from premechanical times to the electronic era, plus the evolution of the Web and Social Media.",
+          difficulty: "hard",
+          estimatedTime: "35 mins",
+          tags: ["history", "ict", "www", "social media"],
+          content: [
+            {
+              type: "heading",
+              text: "Definition of ICT"
+            },
+            {
+              type: "paragraph",
+              text: "Information and Communications Technology (ICT) refers to technologies, both hardware and software, through which humans are able to communicate with one another."
+            },
+            {
+              type: "heading",
+              text: "Four Main Historical Periods of ICT"
+            },
+            {
+              type: "list",
+              ordered: false,
+              items: [
+                "1. The Premechanical Period (3,000 BCE to 1,450 CE): Humans wrote symbols as substitutes. Papyrus plant revolutionized paper storage, making libraries the first data centers. The Abacus was introduced in the 2nd Century BCE by Romans/China as the first counting and information-processing device.",
+                "2. The Mechanical Period (1450 - 1840): Concentrated on enhancement of calculation speed. Key inventions include the Pascaline (mechanical calculator by Blaise Pascal and Wilhelm Schickard) and the Analytical Engine (invented by Charles Babbage in 1837, earning him the title 'Father of the Computers' with ALU, control flow, and integrated memory).",
+                "3. The Electromechanical Period (1840 - 1940): Ushered in electrical communications. The telegraph (invented in 1837 by William Cooke and Sir Charles Wheatstone) used electric current across five magnetic needles. Samuel Morse invented the single-circuit telegraph and Morse Code in 1844. Alexander Graham Bell patented the telephone in 1876. Alan Turing and Gordon Welchman invented The Bombe in 1939-1940 to decipher encrypted codes during WWII.",
+                "4. The Electronic Period (1940s to Present): Focused on solid-state devices. Key milestones include ENIAC (first electronic general purpose computer occupying 167 square meters), the Transistor (invented in 1947, lightweight and fast), the Integrated Circuit (IC - group of transistors compressed in a single package), Olivetti Programma 101 (first commercial personal computer in 1965), and the IBM 5150 (released in August 1981, setting standard PC platforms)."
+              ]
+            },
+            {
+              type: "heading",
+              text: "World Wide Web and Social Media"
+            },
+            {
+              type: "paragraph",
+              text: "The World Wide Web (WWW) was proposed by Tim Berners-Lee in 1989 to access hypertext documents and files over the internet."
+            },
+            {
+              type: "list",
+              ordered: false,
+              items: [
+                "Web 1.0 (Read-only Web): Information or hypertext files are accessed by users.",
+                "Web 2.0 (Read-and-write Web): Introduced user interaction, emailing websites, and social networking sites.",
+                "Web 3.0 (Semantic executing Web): Smarter access to hypertext files with wider and faster search capabilities.",
+                "Social Media: Applications starting with Web 2.0 used for communicating and socializing in virtual communities. Virality is defined as the rate of reposting or sharing of photos, information, or ideas."
+              ]
+            },
+            {
+              type: "heading",
+              text: "Computer Characteristics and Applications"
+            },
+            {
+              type: "paragraph",
+              text: "Computers perform four main functions: Input, Process, Output, and Store. Their characteristics include Speed, Memory, Diligence, Versatility, and Accuracy."
+            },
+            {
+              type: "list",
+              ordered: false,
+              items: [
+                "Applications include Engineering & Architecture, Education, Government, The Home, Health and Medicine, Manufacturing Industries, Connectivity (assisting disabled individuals), Scientific Research, Communication with the World, and Paperwork reduction."
+              ]
+            }
+          ],
+          flashcards: [
+            {
+              id: "fc_hist_001",
+              front: "Who is known as the 'Father of the Computers' for inventing the Analytical Engine?",
+              back: "Charles Babbage"
+            },
+            {
+              id: "fc_hist_002",
+              front: "What was the first commercial personal computer sold in 1965?",
+              back: "Olivetti Programma 101"
+            },
+            {
+              id: "fc_hist_003",
+              front: "Who proposed the World Wide Web in 1989?",
+              back: "Tim Berners-Lee"
+            },
+            {
+              id: "fc_hist_004",
+              front: "What is the difference between Web 1.0, Web 2.0, and Web 3.0?",
+              back: "Web 1.0 is read-only, Web 2.0 is read-and-write (interactive/social), and Web 3.0 is the semantic executing web for smarter and faster searches."
+            }
+          ],
+          questions: [
+            {
               type: "multiple_choice",
-              question: "What is the primary focus of 'Consideration' in communication?",
+              question: "Who invented the Analytical Engine in 1837, earning the title 'Father of the Computers'?",
               choices: [
-                "Using short sentences",
-                "Giving attention to the receiver's needs, thoughts, and requirements",
-                "Checking factual accuracy",
-                "Using polite words to resolve disputes"
+                "Blaise Pascal",
+                "Charles Babbage",
+                "Tim Berners-Lee",
+                "Alan Turing"
               ],
               answer: 1,
-              explanation: "Consideration focuses on the needs, thoughts, and requirements of receivers with a positive approach.",
+              explanation: "Charles Babbage invented the Analytical Engine, featuring an ALU, control flow, and integrated memory.",
+              difficulty: "easy",
+              tags: ["history", "ict"]
+            },
+            {
+              type: "multiple_choice",
+              question: "Which web era introduced user interaction, email integration, and social networking?",
+              choices: [
+                "Web 1.0",
+                "Web 2.0",
+                "Web 3.0",
+                "Web 4.0"
+              ],
+              answer: 1,
+              explanation: "Web 2.0 is the read-and-write web that enabled user interaction and social networking.",
               difficulty: "medium",
-              tags: ["7Cs"]
+              tags: ["www", "history"]
+            },
+            {
+              type: "identification",
+              question: "What term is defined as the rate of reposting or sharing of photos, pieces of information, or ideas published on a social media profile page?",
+              answer: "Virality",
+              explanation: "Virality measures how quickly content spreads across social media networks through sharing and reposting.",
+              difficulty: "medium",
+              tags: ["social media"]
             }
           ]
         }
