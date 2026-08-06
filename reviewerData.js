@@ -145,7 +145,7 @@ window.reviewerData = {
                         },
                         {
                             type: "paragraph",
-                    text: "The fusion of hardware equipment, precise software, GUI, and effective communications network constitutes modern ICT. The World Wide Web is the system enabling access to hypertext documents and files over the internet."
+                            text: "The fusion of hardware equipment, precise software, GUI, and effective communications network constitutes modern ICT. The World Wide Web is the system enabling access to hypertext documents and files over the internet."
                         },
                         {
                             type: "paragraph",
