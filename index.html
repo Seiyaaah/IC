@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Learning OS - Personal Educational Platform</title>
+    <title>Learning OS v2.5 - Educational Reviewer Engine</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -23,1062 +24,1269 @@
             }
         }
     </script>
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .perspective-1000 { perspective: 1000px; }
-        .transform-style-3d { transform-style: preserve-3d; }
-        .backface-hidden { backface-visibility: hidden; }
-        .rotate-y-180 { transform: rotateY(180deg); }
-        /* Custom scrollbar styling */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(156, 163, 175, 0.5); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(156, 163, 175, 0.8); }
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.5);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(107, 114, 128, 0.8);
+        }
+        /* Flip card perspective */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
     </style>
 </head>
-<body class="h-full bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased transition-colors duration-200 overflow-hidden flex flex-col">
+<body class="h-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-200">
 
-    <div id="app-root" class="h-full w-full flex flex-col overflow-hidden">
+    <!-- MANDATORY: reviewerData.js must load before the application script -->
+    <script src="reviewerData.js"></script>
+
+    <div id="app-container" class="h-full flex flex-col">
         <!-- Error Container (Hidden by default) -->
-        <div id="error-screen" class="hidden fixed inset-0 z-50 bg-slate-900 text-white flex items-center justify-center p-6">
-            <div class="max-w-md w-full bg-slate-800 border border-slate-700 rounded-2xl p-8 shadow-2xl text-center">
-                <div class="w-16 h-16 bg-rose-500/10 text-rose-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">⚠️</div>
-                <h2 id="error-title" class="text-xl font-bold mb-2">Failed to Load Learning Data</h2>
-                <p id="error-message" class="text-sm text-slate-300 mb-6 leading-relaxed">reviewerData.js is missing or invalid. Please check your data source.</p>
-                <div class="bg-slate-900/50 rounded-xl p-4 text-left text-xs font-mono text-slate-400 mb-6 space-y-1 overflow-x-auto">
-                    <div>• Check file location & name</div>
-                    <div>• Verify window.reviewerData structure</div>
-                    <div>• Ensure subjects array is populated</div>
+        <div id="error-screen" class="hidden fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-8 max-w-md w-full shadow-2xl border border-slate-200 dark:border-slate-700 text-center">
+                <div class="w-16 h-16 bg-red-100 dark:bg-red-900/30 text-red-500 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
                 </div>
-                <button onclick="location.reload()" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-medium py-3 px-4 rounded-xl transition-all shadow-lg shadow-brand-600/25">Reload Application</button>
+                <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Initialization Error</h2>
+                <p id="error-message" class="text-slate-600 dark:text-slate-300 text-sm mb-6">Could not load reviewerData.js or data structure is invalid.</p>
+                <button onclick="location.reload()" class="w-full py-3 px-4 bg-brand-600 hover:bg-brand-700 text-white font-medium rounded-xl transition-colors shadow-lg shadow-brand-500/20">
+                    Retry Loading
+                </button>
             </div>
         </div>
 
-        <!-- Main App Shell -->
-        <div id="app-shell" class="hidden h-full w-full flex flex-col md:flex-row overflow-hidden">
-            
-            <!-- Desktop Sidebar -->
-            <aside class="hidden md:flex flex-col w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 z-20 shrink-0">
-                <div class="p-5 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
+        <!-- Main App Layout -->
+        <div id="main-layout" class="flex-1 flex overflow-hidden">
+            <!-- Sidebar Navigation -->
+            <aside id="sidebar" class="w-64 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 flex flex-col z-20 transition-all duration-300 -translate-x-full md:translate-x-0 fixed md:static inset-y-0 left-0">
+                <div class="p-5 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
                     <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold text-lg shadow-md shadow-brand-600/30">L</div>
+                        <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white font-bold text-lg shadow-md shadow-brand-500/20">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
                         <div>
-                            <h1 class="font-bold text-sm tracking-wide">Learning OS</h1>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">Personal Engine</p>
+                            <h1 class="font-bold text-slate-900 dark:text-white leading-tight">Learning OS</h1>
+                            <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">v2.5 Master Engine</span>
                         </div>
                     </div>
+                    <button id="mobile-close-sidebar" class="md:hidden text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
                 </div>
-                <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-                    <button onclick="router.navigate('home')" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800" data-route="home">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+
+                <!-- Navigation Links -->
+                <nav class="flex-1 overflow-y-auto p-4 space-y-1.5" id="nav-links">
+                    <a href="#dashboard" data-route="dashboard" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors">
+                        <i class="fa-solid fa-house w-5 text-center"></i>
                         <span>Dashboard</span>
-                    </button>
-                    <button onclick="router.navigate('subjects')" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800" data-route="subjects">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                    </a>
+                    <a href="#subjects" data-route="subjects" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors">
+                        <i class="fa-solid fa-book-open w-5 text-center"></i>
                         <span>Subjects</span>
-                    </button>
-                    <button onclick="router.navigate('bookmarks')" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800" data-route="bookmarks">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
-                        <span>Bookmarks</span>
-                    </button>
-                    <button onclick="router.navigate('favorites')" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800" data-route="favorites">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                        <span>Favorites</span>
-                    </button>
-                    <button onclick="router.navigate('statistics')" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800" data-route="statistics">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                    </a>
+                    <a href="#bookmarks" data-route="bookmarks" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors">
+                        <i class="fa-solid fa-bookmark w-5 text-center"></i>
+                        <span>Bookmarks & Favs</span>
+                    </a>
+                    <a href="#statistics" data-route="statistics" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors">
+                        <i class="fa-solid fa-chart-line w-5 text-center"></i>
                         <span>Statistics</span>
-                    </button>
-                    <button onclick="router.navigate('settings')" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800" data-route="settings">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    </a>
+                    <a href="#settings" data-route="settings" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors">
+                        <i class="fa-solid fa-gear w-5 text-center"></i>
                         <span>Settings</span>
-                    </button>
+                    </a>
                 </nav>
-                <div class="p-4 border-t border-slate-100 dark:border-slate-800">
-                    <div class="flex items-center justify-between bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl">
-                        <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Dark Mode</span>
-                        <button onclick="themeManager.toggle()" class="w-9 h-5 bg-slate-300 dark:bg-brand-600 rounded-full relative transition-colors focus:outline-none">
-                            <span id="theme-toggle-knob" class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform dark:translate-x-4"></span>
-                        </button>
+
+                <!-- Sidebar Footer Streak -->
+                <div class="p-4 border-t border-slate-200 dark:border-slate-700">
+                    <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/40 rounded-xl p-3 flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-lg bg-amber-500 text-white flex items-center justify-center text-lg shadow-sm">
+                            <i class="fa-solid fa-fire"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs text-amber-800 dark:text-amber-300 font-semibold uppercase tracking-wider">Study Streak</div>
+                            <div class="text-lg font-bold text-amber-900 dark:text-amber-200"><span id="sidebar-streak-count">0</span> Days</div>
+                        </div>
                     </div>
                 </div>
             </aside>
 
-            <!-- Mobile Top Header -->
-            <header class="md:hidden flex items-center justify-between px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 z-20">
-                <div class="flex items-center space-x-2">
-                    <div class="w-8 h-8 rounded-lg bg-brand-600 text-white flex items-center justify-center font-bold text-sm">L</div>
-                    <h1 class="font-bold text-sm">Learning OS</h1>
-                </div>
-                <button onclick="toggleMobileMenu()" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
-                </button>
-            </header>
-
-            <!-- Mobile Slide-over Drawer -->
-            <div id="mobile-drawer" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm hidden md:hidden flex justify-end">
-                <div class="w-72 h-full bg-white dark:bg-slate-900 flex flex-col shadow-2xl">
-                    <div class="p-4 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
-                        <span class="font-bold text-sm">Navigation</span>
-                        <button onclick="toggleMobileMenu()" class="p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800">✕</button>
-                    </div>
-                    <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-                        <button onclick="router.navigate('home'); toggleMobileMenu();" class="w-full flex items-center space-x-3 px-3 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">Dashboard</button>
-                        <button onclick="router.navigate('subjects'); toggleMobileMenu();" class="w-full flex items-center space-x-3 px-3 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">Subjects</button>
-                        <button onclick="router.navigate('bookmarks'); toggleMobileMenu();" class="w-full flex items-center space-x-3 px-3 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">Bookmarks</button>
-                        <button onclick="router.navigate('favorites'); toggleMobileMenu();" class="w-full flex items-center space-x-3 px-3 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">Favorites</button>
-                        <button onclick="router.navigate('statistics'); toggleMobileMenu();" class="w-full flex items-center space-x-3 px-3 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">Statistics</button>
-                        <button onclick="router.navigate('settings'); toggleMobileMenu();" class="w-full flex items-center space-x-3 px-3 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">Settings</button>
-                    </nav>
-                </div>
-            </div>
-
             <!-- Main Content Area -->
-            <main class="flex-1 flex flex-col min-w-0 overflow-hidden bg-slate-50 dark:bg-slate-950 relative">
-                
-                <!-- Top Utility Bar (Search & Quick Actions) -->
-                <header class="h-16 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md px-6 flex items-center justify-between shrink-0 z-10">
-                    <div class="flex items-center space-x-4 flex-1 max-w-xl">
-                        <button onclick="openSearchModal()" class="w-full flex items-center justify-between px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:border-brand-500 transition-all border border-transparent text-sm">
-                            <span class="flex items-center space-x-2">
-                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                                <span>Search lessons, definitions, questions...</span>
-                            </span>
-                            <kbd class="hidden sm:inline-block px-2 py-0.5 text-xs font-mono bg-white dark:bg-slate-700 text-slate-500 rounded border border-slate-200 dark:border-slate-600">Ctrl+K</kbd>
+            <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+                <!-- Top Header Bar -->
+                <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 h-16 flex items-center justify-between px-4 md:px-8 z-10">
+                    <div class="flex items-center space-x-4">
+                        <button id="mobile-toggle" class="md:hidden text-slate-600 dark:text-slate-300 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700">
+                            <i class="fa-solid fa-bars text-xl"></i>
+                        </button>
+                        <!-- Global Search Bar Trigger -->
+                        <button id="search-trigger" class="flex items-center space-x-3 bg-slate-100 dark:bg-slate-700/50 hover:bg-slate-200/70 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 px-4 py-2 rounded-xl text-sm w-48 sm:w-80 transition-colors border border-transparent hover:border-slate-300 dark:hover:border-slate-600">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <span class="truncate">Search subjects, lessons, cards...</span>
+                            <kbd class="hidden sm:inline-block ml-auto text-xs bg-white dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-600 font-mono">⌘K</kbd>
                         </button>
                     </div>
-                    <div class="flex items-center space-x-3 ml-4">
-                        <div id="streak-badge" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-semibold">
-                            <span>🔥</span>
-                            <span id="streak-count">0</span> Day Streak
-                        </div>
+
+                    <div class="flex items-center space-x-3">
+                        <!-- Theme Toggle Button -->
+                        <button id="theme-toggle" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+                            <i class="fa-solid fa-moon dark:hidden"></i>
+                            <i class="fa-solid fa-sun hidden dark:inline"></i>
+                        </button>
                     </div>
                 </header>
 
-                <!-- Dynamic View Container -->
-                <div id="view-container" class="flex-1 overflow-y-auto p-4 sm:p-8 max-w-7xl w-full mx-auto">
-                    <!-- Dynamic views rendered here -->
-                </div>
-
-            </main>
+                <!-- Dynamic Viewport -->
+                <main id="main-viewport" class="flex-1 overflow-y-auto p-4 md:p-8 relative">
+                    <!-- Dynamic views injected here -->
+                </main>
+            </div>
         </div>
+    </div>
 
-        <!-- Global Search Modal -->
-        <div id="search-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-start justify-center pt-20 p-4">
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh]">
-                <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center space-x-3">
-                    <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                    <input type="text" id="global-search-input" oninput="handleGlobalSearch(this.value)" placeholder="Search across all subjects, lessons, and questions..." class="w-full bg-transparent border-none outline-none text-slate-900 dark:text-white placeholder-slate-400 text-sm">
-                    <button onclick="closeSearchModal()" class="text-xs px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-500">ESC</button>
-                </div>
-                <div id="search-results-container" class="flex-1 overflow-y-auto p-4 space-y-2">
-                    <div class="text-center py-8 text-sm text-slate-400">Type to start searching...</div>
+    <!-- Global Search Modal -->
+    <div id="search-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-start justify-center pt-20 p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-2xl w-full shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col max-h-[80vh]">
+            <div class="p-4 border-b border-slate-200 dark:border-slate-700 flex items-center space-x-3">
+                <i class="fa-solid fa-magnifying-glass text-slate-400"></i>
+                <input id="global-search-input" type="text" placeholder="Type to search subjects, lessons, flashcards, questions..." class="flex-1 bg-transparent border-none outline-none text-slate-900 dark:text-white placeholder-slate-400 text-base">
+                <button id="search-close" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-sm px-2 py-1 rounded bg-slate-100 dark:bg-slate-700">ESC</button>
+            </div>
+            <div id="search-results" class="flex-1 overflow-y-auto p-4 space-y-2">
+                <div class="text-center py-12 text-slate-400">
+                    <i class="fa-solid fa-compass text-3xl mb-2 opacity-40"></i>
+                    <p class="text-sm">Start typing to search across all educational content.</p>
                 </div>
             </div>
         </div>
-
-        <!-- Toast Notifications Container -->
-        <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
-
     </div>
 
     <script>
-        /**
-         * Learning OS Engine Core Architecture
-         */
-
-        // State & LocalStorage Manager
-        const store = {
-            getState() {
+        class StorageManager {
+            static get(key, defaultValue) {
                 try {
-                    const saved = localStorage.getItem('learning_os_state');
-                    if (saved) return JSON.parse(saved);
-                } catch(e) { console.error('Failed to load state', e); }
-                return {
-                    theme: 'system',
-                    bookmarks: [], // { type: 'lesson'|'question'|'flashcard', id: string, subjectId: string }
-                    favorites: [], // { type: 'subject'|'lesson', id: string }
-                    progress: {},  // lessonId -> { completed: bool, quizScores: [], flashcardsReviewed: [] }
+                    const item = localStorage.getItem(`learning_os_${key}`);
+                    return item ? JSON.parse(item) : defaultValue;
+                } catch (e) {
+                    console.error("Storage read error:", e);
+                    return defaultValue;
+                }
+            }
+
+            static set(key, value) {
+                try {
+                    localStorage.setItem(`learning_os_${key}`, JSON.stringify(value));
+                } catch (e) {
+                    console.error("Storage write error:", e);
+                }
+            }
+        }
+
+        class ThemeManager {
+            static init() {
+                const savedTheme = StorageManager.get('theme', 'system');
+                this.apply(savedTheme);
+            }
+
+            static apply(theme) {
+                const root = document.documentElement;
+                if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    root.classList.add('dark');
+                } else {
+                    root.classList.remove('dark');
+                }
+                StorageManager.set('theme', theme);
+            }
+
+            static toggle() {
+                const isDark = document.documentElement.classList.contains('dark');
+                this.apply(isDark ? 'light' : 'dark');
+            }
+        }
+
+        class ProgressManager {
+            static getProgress() {
+                return StorageManager.get('progress', {
+                    completedLessons: {}, // lessonId: true
+                    lessonProgress: {}, // lessonId: percentage
+                    quizHistory: [], // {quizId, score, total, date, type}
+                    flashcardProgress: {}, // cardId: status
                     streak: { count: 0, lastDate: null },
-                    recentLessons: [], // lessonIds
-                    settings: { fontSize: 'normal', autoPlayAudio: true, timerEnabled: true }
-                };
-            },
-            saveState(state) {
-                try {
-                    localStorage.setItem('learning_os_state', JSON.stringify(state));
-                } catch(e) { console.error('Failed to save state', e); }
-            },
-            isBookmarked(type, id) {
-                const s = this.getState();
-                return s.bookmarks.some(b => b.type === type && b.id === id);
-            },
-            toggleBookmark(type, id, meta = {}) {
-                const s = this.getState();
-                const idx = s.bookmarks.findIndex(b => b.type === type && b.id === id);
-                if (idx > -1) {
-                    s.bookmarks.splice(idx, 1);
-                    showToast('Bookmark removed', 'info');
-                } else {
-                    s.bookmarks.push({ type, id, ...meta, timestamp: Date.now() });
-                    showToast('Bookmark added', 'success');
-                }
-                this.saveState(s);
-                return idx === -1;
-            },
-            isFavorite(type, id) {
-                const s = this.getState();
-                return s.favorites.some(f => f.type === type && f.id === id);
-            },
-            toggleFavorite(type, id, meta = {}) {
-                const s = this.getState();
-                const idx = s.favorites.findIndex(f => f.type === type && f.id === id);
-                if (idx > -1) {
-                    s.favorites.splice(idx, 1);
-                    showToast('Removed from favorites', 'info');
-                } else {
-                    s.favorites.push({ type, id, ...meta, timestamp: Date.now() });
-                    showToast('Added to favorites', 'success');
-                }
-                this.saveState(s);
-                return idx === -1;
-            },
-            recordLessonView(lessonId, subjectId) {
-                const s = this.getState();
-                s.recentLessons = s.recentLessons.filter(id => id !== lessonId);
-                s.recentLessons.unshift(lessonId);
-                if (s.recentLessons.length > 10) s.recentLessons.pop();
-                
-                // Update streak
+                    studyTimeMinutes: 0
+                });
+            }
+
+            static saveProgress(progress) {
+                StorageManager.set('progress', progress);
+            }
+
+            static markLessonComplete(lessonId, completed = true) {
+                const progress = this.getProgress();
+                progress.completedLessons[lessonId] = completed;
+                this.checkAndUpdateStreak();
+                this.saveProgress(progress);
+            }
+
+            static recordQuizResult(result) {
+                const progress = this.getProgress();
+                progress.quizHistory.push({ ...result, date: new Date().toISOString() });
+                this.checkAndUpdateStreak();
+                this.saveProgress(progress);
+            }
+
+            static checkAndUpdateStreak() {
+                const progress = this.getProgress();
                 const today = new Date().toDateString();
-                if (s.streak.lastDate !== today) {
-                    const yesterday = new Date(Date.now() - 86400000).toDateString();
-                    if (s.streak.lastDate === yesterday) {
-                        s.streak.count += 1;
-                    } else if (!s.streak.lastDate) {
-                        s.streak.count = 1;
-                    } else {
-                        s.streak.count = 1; // reset streak if missed
-                    }
-                    s.streak.lastDate = today;
-                }
-                this.saveState(s);
-            },
-            recordQuizScore(lessonId, score, total) {
-                const s = this.getState();
-                if (!s.progress[lessonId]) s.progress[lessonId] = { completed: false, quizScores: [], flashcardsReviewed: [] };
-                s.progress[lessonId].quizScores.push({ score, total, date: Date.now() });
-                if (score / total >= 0.7) s.progress[lessonId].completed = true;
-                this.saveState(s);
-            }
-        };
+                if (progress.streak.lastDate === today) return;
 
-        // Theme Manager
-        const themeManager = {
-            init() {
-                const state = store.getState();
-                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                if (state.theme === 'dark' || (state.theme === 'system' && prefersDark)) {
-                    document.documentElement.classList.add('dark');
+                const last = progress.streak.lastDate ? new Date(progress.streak.lastDate) : null;
+                const now = new Date(today);
+
+                if (!last) {
+                    progress.streak.count = 1;
                 } else {
-                    document.documentElement.classList.remove('dark');
+                    const diffTime = Math.abs(now - last);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    if (diffDays === 1) {
+                        progress.streak.count += 1;
+                    } else if (diffDays > 1) {
+                        progress.streak.count = 1;
+                    }
                 }
-            },
-            toggle() {
-                const isDark = document.documentElement.classList.toggle('dark');
-                const state = store.getState();
-                state.theme = isDark ? 'dark' : 'light';
-                store.saveState(state);
-                showToast(`Switched to ${state.theme} mode`, 'info');
+                progress.streak.lastDate = today;
+                this.saveProgress(progress);
             }
-        };
-
-        // Toast Notification System
-        function showToast(message, type = 'info') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            const bgColors = {
-                success: 'bg-emerald-600 text-white',
-                error: 'bg-rose-600 text-white',
-                info: 'bg-slate-800 text-white dark:bg-slate-700'
-            };
-            toast.className = `px-4 py-3 rounded-xl shadow-lg text-sm font-medium transition-all transform translate-y-2 opacity-0 pointer-events-auto flex items-center space-x-2 ${bgColors[type] || bgColors.info}`;
-            toast.innerHTML = `<span>${message}</span>`;
-            container.appendChild(toast);
-            setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 10);
-            setTimeout(() => {
-                toast.classList.add('translate-y-2', 'opacity-0');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
         }
 
-        // Data Validation Engine
-        function validateReviewerData() {
-            if (!window.reviewerData) {
-                showErrorScreen("reviewerData.js is missing", "The global variable window.reviewerData is undefined. Ensure reviewerData.js is loaded before index.html.");
-                return false;
+        class BookmarksManager {
+            static getBookmarks() {
+                return StorageManager.get('bookmarks', { subjects: {}, lessons: {}, flashcards: {}, questions: {} });
             }
-            if (!window.reviewerData.subjects || !Array.isArray(window.reviewerData.subjects)) {
-                showErrorScreen("Invalid reviewerData.js Structure", "window.reviewerData must contain a 'subjects' array.");
-                return false;
+
+            static getFavorites() {
+                return StorageManager.get('favorites', { subjects: {}, lessons: {}, flashcards: {}, questions: {} });
             }
-            return true;
+
+            static toggleBookmark(type, id) {
+                const bm = this.getBookmarks();
+                bm[type][id] = !bm[type][id];
+                StorageManager.set('bookmarks', bm);
+                return bm[type][id];
+            }
+
+            static toggleFavorite(type, id) {
+                const fav = this.getFavorites();
+                fav[type][id] = !fav[type][id];
+                StorageManager.set('favorites', fav);
+                return fav[type][id];
+            }
+
+            static isBookmarked(type, id) {
+                return !!this.getBookmarks()[type][id];
+            }
+
+            static isFavorite(type, id) {
+                return !!this.getFavorites()[type][id];
+            }
         }
 
-        function showErrorScreen(title, message) {
-            document.getElementById('error-title').textContent = title;
-            document.getElementById('error-message').textContent = message;
-            document.getElementById('error-screen').classList.remove('hidden');
-            document.getElementById('app-shell').classList.add('hidden');
-        }
-    </script>
+        class DataManager {
+            static validateAndInit() {
+                if (typeof window.reviewerData === 'undefined' || !window.reviewerData || !Array.isArray(window.reviewerData.subjects)) {
+                    document.getElementById('error-screen').classList.remove('hidden');
+                    return false;
+                }
+                return true;
+            }
 
-    <script>
-        /**
-         * Client-Side Router & View Controller
-         */
-        const router = {
-            currentRoute: 'home',
-            params: {},
-            navigate(route, params = {}) {
-                this.currentRoute = route;
-                this.params = params;
-                window.location.hash = `#${route}${params.id ? '/' + params.id : ''}${params.lessonId ? '/' + params.lessonId : ''}`;
-                this.render();
-                window.scrollTo(0, 0);
-                this.updateActiveNav();
-            },
-            updateActiveNav() {
-                document.querySelectorAll('.nav-btn').forEach(btn => {
-                    if (btn.getAttribute('data-route') === this.currentRoute) {
-                        btn.classList.add('bg-brand-50', 'text-brand-600', 'dark:bg-slate-800', 'dark:text-brand-400');
-                    } else {
-                        btn.classList.remove('bg-brand-50', 'text-brand-600', 'dark:bg-slate-800', 'dark:text-brand-400');
+            static getSubjects() {
+                return window.reviewerData.subjects || [];
+            }
+
+            static getSubject(subjectId) {
+                return this.getSubjects().find(s => (s.id || s.name) === subjectId);
+            }
+
+            static getLesson(subjectId, lessonId) {
+                const subject = this.getSubject(subjectId);
+                if (!subject || !subject.lessons) return null;
+                return subject.lessons.find(l => (l.id || l.title) === lessonId);
+            }
+
+            static getAllLessons() {
+                let lessons = [];
+                this.getSubjects().forEach(subj => {
+                    if (subj.lessons) {
+                        subj.lessons.forEach(lesson => {
+                            lessons.push({ ...lesson, subjectId: subj.id || subj.name, subjectName: subj.name });
+                        });
                     }
                 });
-            },
-            render() {
-                const container = document.getElementById('view-container');
-                container.innerHTML = '';
-                
-                try {
-                    switch(this.currentRoute) {
-                        case 'home': renderDashboard(container); break;
-                        case 'subjects': renderSubjectsView(container); break;
-                        case 'subject-detail': renderSubjectDetailView(container, this.params.id); break;
-                        case 'lesson-review': renderLessonReviewView(container, this.params.id, this.params.lessonId); break;
-                        case 'practice-hub': renderPracticeHubView(container, this.params.id, this.params.lessonId); break;
-                        case 'flashcards': renderFlashcardsView(container, this.params.id, this.params.lessonId); break;
-                        case 'quiz': renderQuizView(container, this.params.id, this.params.lessonId); break;
-                        case 'bookmarks': renderBookmarksView(container); break;
-                        case 'favorites': renderFavoritesView(container); break;
-                        case 'statistics': renderStatisticsView(container); break;
-                        case 'settings': renderSettingsView(container); break;
-                        default: renderDashboard(container);
+                return lessons;
+            }
+
+            static getAllFlashcards() {
+                let cards = [];
+                this.getSubjects().forEach(subj => {
+                    if (subj.lessons) {
+                        subj.lessons.forEach(lesson => {
+                            if (lesson.flashcards) {
+                                lesson.flashcards.forEach((card, idx) => {
+                                    cards.push({ ...card, id: card.id || `${subj.id}-${lesson.id || lesson.title}-fc-${idx}`, lessonTitle: lesson.title, subjectName: subj.name });
+                                });
+                            }
+                        });
                     }
-                } catch(e) {
-                    console.error('Rendering error:', e);
-                    container.innerHTML = `<div class="p-8 text-center"><h3 class="text-lg font-bold text-rose-500">Error rendering view</h3><p class="text-sm text-slate-500 mt-2">${e.message}</p></div>`;
-                }
-            }
-        };
-
-        function toggleMobileMenu() {
-            const drawer = document.getElementById('mobile-drawer');
-            drawer.classList.toggle('hidden');
-        }
-
-        // Global data access helpers
-        function getSubjects() { return window.reviewerData.subjects || []; }
-        function getSubject(id) { return getSubjects().find(s => s.id === id || s.name === id); }
-        function getLesson(subjectId, lessonId) {
-            const sub = getSubject(subjectId);
-            if (!sub || !sub.lessons) return null;
-            return sub.lessons.find(l => l.id === lessonId || l.title === lessonId);
-        }
-    </script>
-
-    <script>
-        /**
-         * Dashboard View Renderer
-         */
-        function renderDashboard(container) {
-            const subjects = getSubjects();
-            const totalLessons = subjects.reduce((acc, s) => acc + (s.lessons ? s.lessons.length : 0), 0);
-            const totalQuestions = subjects.reduce((acc, s) => acc + (s.lessons ? s.lessons.reduce((qa, l) => qa + (l.questions ? l.questions.length : 0), 0) : 0), 0);
-            const totalFlashcards = subjects.reduce((acc, s) => acc + (s.lessons ? s.lessons.reduce((fa, l) => fa + (l.flashcards ? l.flashcards.length : 0), 0) : 0), 0);
-            
-            const state = store.getState();
-            document.getElementById('streak-count').textContent = state.streak.count;
-
-            container.innerHTML = `
-                <div class="space-y-8 pb-12">
-                    <!-- Welcome Hero Card -->
-                    <div class="bg-gradient-to-r from-brand-600 to-indigo-700 rounded-3xl p-8 text-white shadow-xl shadow-brand-600/20 relative overflow-hidden">
-                        <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
-                        <div class="max-w-xl relative z-10 space-y-3">
-                            <span class="px-3 py-1 rounded-full bg-white/20 text-xs font-semibold uppercase tracking-wider">Welcome Back</span>
-                            <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">Ready to continue your learning journey?</h2>
-                            <p class="text-indigo-100 text-sm leading-relaxed">You have ${subjects.length} subjects available with ${totalLessons} interactive lessons ready for review.</p>
-                            <div class="pt-2 flex flex-wrap gap-3">
-                                <button onclick="router.navigate('subjects')" class="bg-white text-brand-600 hover:bg-indigo-50 font-semibold px-5 py-2.5 rounded-xl text-sm transition-all shadow-md">Browse Subjects</button>
-                                ${state.recentLessons.length > 0 ? `<button onclick="resumeLastLesson()" class="bg-brand-500/40 hover:bg-brand-500/60 text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition-all border border-white/20">Resume Last Lesson</button>` : ''}
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Statistics Grid -->
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
-                            <div class="text-slate-500 dark:text-slate-400 text-xs font-medium uppercase tracking-wider">Subjects</div>
-                            <div class="text-2xl font-bold mt-1 text-slate-900 dark:text-white">${subjects.length}</div>
-                        </div>
-                        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
-                            <div class="text-slate-500 dark:text-slate-400 text-xs font-medium uppercase tracking-wider">Lessons</div>
-                            <div class="text-2xl font-bold mt-1 text-slate-900 dark:text-white">${totalLessons}</div>
-                        </div>
-                        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
-                            <div class="text-slate-500 dark:text-slate-400 text-xs font-medium uppercase tracking-wider">Practice Questions</div>
-                            <div class="text-2xl font-bold mt-1 text-slate-900 dark:text-white">${totalQuestions}</div>
-                        </div>
-                        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
-                            <div class="text-slate-500 dark:text-slate-400 text-xs font-medium uppercase tracking-wider">Flashcards</div>
-                            <div class="text-2xl font-bold mt-1 text-slate-900 dark:text-white">${totalFlashcards}</div>
-                        </div>
-                    </div>
-
-                    <!-- Subjects Preview Section -->
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between">
-                            <h3 class="text-xl font-bold tracking-tight">Available Subjects</h3>
-                            <button onclick="router.navigate('subjects')" class="text-sm font-semibold text-brand-600 dark:text-brand-400 hover:underline">View All →</button>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            ${subjects.slice(0, 3).map(subject => {
-                                const lessonCount = subject.lessons ? subject.lessons.length : 0;
-                                const isFav = store.isFavorite('subject', subject.id || subject.name);
-                                return `
-                                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group cursor-pointer" onclick="router.navigate('subject-detail', { id: '${subject.id || subject.name}' })">
-                                        <div>
-                                            <div class="flex items-center justify-between mb-3">
-                                                <span class="px-3 py-1 rounded-lg bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 text-xs font-semibold">${lessonCount} Lessons</span>
-                                                <button onclick="event.stopPropagation(); store.toggleFavorite('subject', '${subject.id || subject.name}'); router.render();" class="text-slate-400 hover:text-rose-500 transition-colors">
-                                                    ${isFav ? '❤️' : '🤍'}
-                                                </button>
-                                            </div>
-                                            <h4 class="font-bold text-lg mb-2 group-hover:text-brand-600 transition-colors">${subject.name}</h4>
-                                            <p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">${subject.description || 'Explore comprehensive lessons and practice questions for this subject.'}</p>
-                                        </div>
-                                        <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-medium text-slate-400">
-                                            <span>Explore Subject</span>
-                                            <span>→</span>
-                                        </div>
-                                    </div>
-                                `;
-                            }).join('')}
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function resumeLastLesson() {
-            const state = store.getState();
-            if (state.recentLessons.length === 0) return;
-            const lessonId = state.recentLessons[0];
-            for (const sub of getSubjects()) {
-                if (sub.lessons) {
-                    const l = sub.lessons.find(item => item.id === lessonId || item.title === lessonId);
-                    if (l) {
-                        router.navigate('lesson-review', { id: sub.id || sub.name, lessonId: l.id || l.title });
-                        return;
-                    }
-                }
-            }
-        }
-    </script>
-
-    <script>
-        /**
-         * Subjects & Lessons View Controllers
-         */
-        function renderSubjectsView(container) {
-            const subjects = getSubjects();
-            container.innerHTML = `
-                <div class="space-y-6 pb-12">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <div>
-                            <h2 class="text-2xl font-bold tracking-tight">All Subjects</h2>
-                            <p class="text-sm text-slate-500 dark:text-slate-400">Select a subject to view structured lessons and practice materials.</p>
-                        </div>
-                        <input type="text" placeholder="Filter subjects..." oninput="filterSubjects(this.value)" class="px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sm focus:outline-none focus:border-brand-500 w-full sm:w-64">
-                    </div>
-                    <div id="subjects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        ${subjects.map(subject => {
-                            const lessonCount = subject.lessons ? subject.lessons.length : 0;
-                            const isFav = store.isFavorite('subject', subject.id || subject.name);
-                            return `
-                                <div class="subject-card bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between cursor-pointer" onclick="router.navigate('subject-detail', { id: '${subject.id || subject.name}' })" data-name="${subject.name.toLowerCase()}">
-                                    <div>
-                                        <div class="flex items-center justify-between mb-3">
-                                            <span class="px-3 py-1 rounded-lg bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 text-xs font-semibold">${lessonCount} Lessons</span>
-                                            <button onclick="event.stopPropagation(); store.toggleFavorite('subject', '${subject.id || subject.name}'); router.render();" class="text-slate-400 hover:text-rose-500">
-                                                ${isFav ? '❤️' : '🤍'}
-                                            </button>
-                                        </div>
-                                        <h3 class="font-bold text-lg mb-2">${subject.name}</h3>
-                                        <p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">${subject.description || 'Comprehensive educational material.'}</p>
-                                    </div>
-                                    <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-medium text-brand-600 dark:text-brand-400">
-                                        <span>Open Lessons</span>
-                                        <span>→</span>
-                                    </div>
-                                </div>
-                            `;
-                        }).join('')}
-                    </div>
-                </div>
-            `;
-        }
-
-        function filterSubjects(query) {
-            const q = query.toLowerCase();
-            document.querySelectorAll('.subject-card').forEach(card => {
-                const name = card.getAttribute('data-name');
-                card.style.display = name.includes(q) ? 'flex' : 'none';
-            });
-        }
-
-        function renderSubjectDetailView(container, subjectId) {
-            const subject = getSubject(subjectId);
-            if (!subject) {
-                container.innerHTML = `<div class="p-8 text-center">Subject not found.</div>`;
-                return;
-            }
-            const lessons = subject.lessons || [];
-
-            container.innerHTML = `
-                <div class="space-y-6 pb-12">
-                    <div class="flex items-center space-x-2 text-sm text-slate-500 dark:text-slate-400">
-                        <button onclick="router.navigate('subjects')" class="hover:underline">Subjects</button>
-                        <span>/</span>
-                        <span class="text-slate-900 dark:text-white font-medium">${subject.name}</span>
-                    </div>
-
-                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-sm">
-                        <h2 class="text-2xl sm:text-3xl font-bold tracking-tight mb-2">${subject.name}</h2>
-                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">${subject.description || ''}</p>
-                        <div class="flex items-center space-x-4 text-xs font-semibold text-slate-500">
-                            <span class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800">${lessons.length} Lessons Available</span>
-                        </div>
-                    </div>
-
-                    <div class="space-y-4">
-                        <h3 class="text-xl font-bold tracking-tight">Lessons</h3>
-                        <div class="grid grid-cols-1 gap-4">
-                            ${lessons.map((lesson, idx) => {
-                                const lId = lesson.id || lesson.title;
-                                const state = store.getState();
-                                const isBookmarked = store.isBookmarked('lesson', lId);
-                                const progress = state.progress[lId] || {};
-                                const isCompleted = progress.completed;
-                                const qCount = lesson.questions ? lesson.questions.length : 0;
-                                const fCount = lesson.flashcards ? lesson.flashcards.length : 0;
-
-                                return `
-                                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                                        <div class="flex items-start space-x-4">
-                                            <div class="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 flex items-center justify-center font-bold text-sm shrink-0">
-                                                ${idx + 1}
-                                            </div>
-                                            <div>
-                                                <div class="flex items-center space-x-2 mb-1">
-                                                    <h4 class="font-bold text-base">${lesson.title}</h4>
-                                                    ${isCompleted ? '<span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 text-xs font-semibold">Completed</span>' : ''}
-                                                </div>
-                                                <p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-1">${lesson.description || 'Explore lesson content, flashcards, and practice quizzes.'}</p>
-                                                <div class="flex items-center space-x-3 mt-3 text-xs text-slate-400">
-                                                    ${qCount > `0` ? `<span>${qCount} Questions</span>` : ''}
-                                                    ${fCount > `0` ? `<span>• ${fCount} Flashcards</span>` : ''}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="flex items-center space-x-2 w-full sm:w-auto justify-end">
-                                            <button onclick="store.toggleBookmark('lesson', '${lId}', { subjectId: '${subject.id || subject.name}', title: '${lesson.title}' }); router.render();" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-500">
-                                                ${isBookmarked ? '🔖' : '📑'}
-                                            </button>
-                                            <button onclick="router.navigate('lesson-review', { id: '${subject.id || subject.name}', lessonId: '${lId}' })" class="px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-medium text-sm shadow-sm transition-all">Review Lesson</button>
-                                        </div>
-                                    </div>
-                                `;
-                            }).join('')}
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-    </script>
-
-    <script>
-        /**
-         * Lesson Review Renderer (Rich Block Engine)
-         */
-        function renderLessonReviewView(container, subjectId, lessonId) {
-            const subject = getSubject(subjectId);
-            const lesson = getLesson(subjectId, lessonId);
-            if (!subject || !lesson) {
-                container.innerHTML = `<div class="p-8 text-center">Lesson not found.</div>`;
-                return;
-            }
-
-            store.recordLessonView(lessonId, subjectId);
-
-            // Parse content blocks or string content
-            let contentHtml = '';
-            if (typeof lesson.content === 'string') {
-                // Auto-format paragraphs
-                contentHtml = lesson.content.split('\n\n').map(p => `<p class="mb-4 text-slate-700 dark:text-slate-300 leading-relaxed">${p}</p>`).join('');
-            } else if (Array.isArray(lesson.content)) {
-                contentHtml = lesson.content.map(block => {
-                    switch(block.type) {
-                        case 'heading': return `<h3 class="text-2xl font-bold tracking-tight mt-8 mb-4 text-slate-900 dark:text-white">${block.text}</h3>`;
-                        case 'subheading': return `<h4 class="text-xl font-bold tracking-tight mt-6 mb-3 text-slate-900 dark:text-white">${block.text}</h4>`;
-                        case 'paragraph': return `<p class="mb-4 text-slate-700 dark:text-slate-300 leading-relaxed">${block.text}</p>`;
-                        case 'definition': return `<div class="bg-brand-50 dark:bg-brand-950/40 border-l-4 border-brand-600 p-4 rounded-r-xl my-4 text-slate-800 dark:text-slate-200"><span class="font-bold text-brand-600 dark:text-brand-400 block mb-1">Definition</span>${block.text}</div>`;
-                        case 'warning': return `<div class="bg-rose-50 dark:bg-rose-950/40 border-l-4 border-rose-500 p-4 rounded-r-xl my-4 text-slate-800 dark:text-slate-200"><span class="font-bold text-rose-500 block mb-1">Warning</span>${block.text}</div>`;
-                        case 'example': return `<div class="bg-emerald-50 dark:bg-emerald-950/40 border-l-4 border-emerald-500 p-4 rounded-r-xl my-4 text-slate-800 dark:text-slate-200"><span class="font-bold text-emerald-600 dark:text-emerald-400 block mb-1">Example</span>${block.text}</div>`;
-                        case 'note': return `<div class="bg-amber-50 dark:bg-amber-950/40 border-l-4 border-amber-500 p-4 rounded-r-xl my-4 text-slate-800 dark:text-slate-200"><span class="font-bold text-amber-600 dark:text-amber-400 block mb-1">Note</span>${block.text}</div>`;
-                        case 'code': return `<pre class="bg-slate-900 text-slate-100 p-4 rounded-xl font-mono text-xs overflow-x-auto my-4"><code>${block.text}</code></pre>`;
-                        default: return `<p class="mb-4 text-slate-700 dark:text-slate-300 leading-relaxed">${block.text || JSON.stringify(block)}</p>`;
-                    }
-                }).join('');
-            } else {
-                contentHtml = `<p class="text-slate-500">No review content available for this lesson.</p>`;
-            }
-
-            const hasQuestions = lesson.questions && lesson.questions.length > 0;
-            const hasFlashcards = lesson.flashcards && lesson.flashcards.length > 0;
-
-            container.innerHTML = `
-                <div class="max-w-4xl mx-auto space-y-8 pb-16">
-                    <div class="flex items-center justify-between text-sm text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800 pb-4">
-                        <div class="flex items-center space-x-2">
-                            <button onclick="router.navigate('subject-detail', { id: '${subject.id || subject.name}' })" class="hover:underline">${subject.name}</button>
-                            <span>/</span>
-                            <span class="text-slate-900 dark:text-white font-medium truncate max-w-xs">${lesson.title}</span>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            ${hasFlashcards ? `<button onclick="router.navigate('flashcards', { id: '${subject.id || subject.name}', lessonId: '${lessonId}' })" class="px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 text-xs font-semibold">Flashcards</button>` : ''}
-                            ${hasQuestions ? `<button onclick="router.navigate('quiz', { id: '${subject.id || subject.name}', lessonId: '${lessonId}' })" class="px-3 py-1.5 rounded-lg bg-brand-600 text-white text-xs font-semibold">Practice Quiz</button>` : ''}
-                        </div>
-                    </div>
-
-                    <div class="space-y-3">
-                        <h1 class="text-3xl sm:text-4xl font-bold tracking-tight">${lesson.title}</h1>
-                        <p class="text-base text-slate-500 dark:text-slate-400">${lesson.description || ''}</p>
-                    </div>
-
-                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-10 shadow-sm leading-relaxed">
-                        ${contentHtml}
-                    </div>
-
-                    <div class="flex items-center justify-between pt-6 border-t border-slate-200 dark:border-slate-800">
-                        <button onclick="router.navigate('subject-detail', { id: '${subject.id || subject.name}' })" class="px-5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">← Back to Lessons</button>
-                        ${hasQuestions ? `<button onclick="router.navigate('quiz', { id: '${subject.id || subject.name}', lessonId: '${lessonId}' })" class="px-6 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold shadow-md">Start Practice Quiz →</button>` : ''}
-                    </div>
-                </div>
-            `;
-        }
-    </script>
-
-    <script>
-        /**
-         * Flashcards View Renderer
-         */
-        function renderFlashcardsView(container, subjectId, lessonId) {
-            const lesson = getLesson(subjectId, lessonId);
-            if (!lesson || !lesson.flashcards || lesson.flashcards.length === 0) {
-                container.innerHTML = `<div class="p-8 text-center">No flashcards available for this lesson.</div>`;
-                return;
-            }
-
-            const cards = lesson.flashcards;
-            let currentIndex = 0;
-            let isFlipped = false;
-
-            window.renderFlashcardCard = function() {
-                const card = cards[currentIndex];
-                const cardEl = document.getElementById('flashcard-inner');
-                const counterEl = document.getElementById('flashcard-counter');
-                const frontText = document.getElementById('flashcard-front-text');
-                const backText = document.getElementById('flashcard-back-text');
-
-                counterEl.textContent = `Card ${currentIndex + 1} of ${cards.length}`;
-                frontText.textContent = card.front || card.question || card.term;
-                backText.textContent = card.back || card.answer || card.definition;
-                
-                if (isFlipped) {
-                    cardEl.classList.add('rotate-y-180');
-                } else {
-                    cardEl.classList.remove('rotate-y-180');
-                }
-            };
-
-            window.flipFlashcard = function() {
-                isFlipped = !isFlipped;
-                window.renderFlashcardCard();
-            };
-
-            window.nextFlashcard = function() {
-                isFlipped = false;
-                currentIndex = (currentIndex + 1) % cards.length;
-                window.renderFlashcardCard();
-            };
-
-            window.prevFlashcard = function() {
-                isFlipped = false;
-                currentIndex = (currentIndex - 1 + cards.length) % cards.length;
-                window.renderFlashcardCard();
-            };
-
-            container.innerHTML = `
-                <div class="max-w-xl mx-auto space-y-6 pb-12 flex flex-col items-center justify-center min-h-[75vh]">
-                    <div class="w-full flex items-center justify-between">
-                        <button onclick="router.navigate('lesson-review', { id: '${subjectId}', lessonId: '${lessonId}' })" class="text-sm font-medium text-slate-500 hover:underline">← Exit Flashcards</button>
-                        <span id="flashcard-counter" class="text-xs font-semibold px-3 py-1 rounded-full bg-slate-200 dark:bg-slate-800">Card 1 of ${cards.length}</span>
-                    </div>
-
-                    <div class="w-full h-80 perspective-1000 cursor-pointer" onclick="flipFlashcard()">
-                        <div id="flashcard-inner" class="relative w-full h-full duration-300 transform-style-3d shadow-xl rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center p-8 text-center">
-                            <!-- Front -->
-                            <div class="absolute inset-0 backface-hidden flex flex-col items-center justify-center p-8">
-                                <span class="text-xs font-semibold uppercase text-brand-600 mb-3">Question / Term</span>
-                                <h3 id="flashcard-front-text" class="text-xl font-bold"></h3>
-                                <span class="text-xs text-slate-400 mt-6">(Click to flip)</span>
-                            </div>
-                            <!-- Back -->
-                            <div class="absolute inset-0 backface-hidden rotate-y-180 flex flex-col items-center justify-center p-8 bg-brand-50/50 dark:bg-slate-800/50 rounded-3xl">
-                                <span class="text-xs font-semibold uppercase text-emerald-600 mb-3">Answer / Definition</span>
-                                <p id="flashcard-back-text" class="text-lg font-medium"></p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center space-x-4">
-                        <button onclick="prevFlashcard()" class="px-5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Previous</button>
-                        <button onclick="flipFlashcard()" class="px-6 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-semibold shadow-md hover:bg-brand-500">Flip Card</button>
-                        <button onclick="nextFlashcard()" class="px-5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Next</button>
-                    </div>
-                </div>
-            `;
-
-            window.renderFlashcardCard();
-        }
-
-        /**
-         * Quiz Engine Renderer
-         */
-        function renderQuizView(container, subjectId, lessonId) {
-            const lesson = getLesson(subjectId, lessonId);
-            if (!lesson || !lesson.questions || lesson.questions.length === 0) {
-                container.innerHTML = `<div class="p-8 text-center">No questions available for this quiz.</div>`;
-                return;
-            }
-
-            const questions = lesson.questions;
-            let currentQIndex = 0;
-            let userAnswers = {};
-            let isSubmitted = false;
-
-            window.selectAnswer = function(qIdx, optionIdx) {
-                if (isSubmitted) return;
-                userAnswers[qIdx] = optionIdx;
-                window.renderQuiz();
-            };
-
-            window.submitQuiz = function() {
-                isSubmitted = true;
-                let correctCount = 0;
-                questions.forEach((q, idx) => {
-                    const correctAns = q.answer !== undefined ? q.answer : q.correctIndex;
-                    if (userAnswers[idx] === correctAns) correctCount++;
                 });
-                store.recordQuizScore(lessonId, correctCount, questions.length);
-                window.renderQuiz();
-            };
+                return cards;
+            }
 
-            window.renderQuiz = function() {
-                const q = questions[currentQIndex];
-                const selectedOpt = userAnswers[currentQIndex];
-                const correctAns = q.answer !== undefined ? q.answer : q.correctIndex;
+            static getAllQuestions() {
+                let questions = [];
+                this.getSubjects().forEach(subj => {
+                    if (subj.lessons) {
+                        subj.lessons.forEach(lesson => {
+                            if (lesson.questions) {
+                                lesson.questions.forEach((q, idx) => {
+                                    questions.push({ ...q, id: q.id || `${subj.id}-${lesson.id || lesson.title}-q-${idx}`, lessonTitle: lesson.title, subjectName: subj.name });
+                                });
+                            }
+                        });
+                    }
+                });
+                return questions;
+            }
+        }
 
-                container.innerHTML = `
-                    <div class="max-w-2xl mx-auto space-y-8 pb-16">
-                        <div class="flex items-center justify-between">
-                            <button onclick="router.navigate('lesson-review', { id: '${subjectId}', lessonId: '${lessonId}' })" class="text-sm font-medium text-slate-500 hover:underline">← Exit Quiz</button>
-                            <span class="text-xs font-semibold px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400">Question ${currentQIndex + 1} of ${questions.length}</span>
-                        </div>
+        class ContentParser {
+            static parse(content) {
+                if (!content) return '<p class="text-slate-400 italic">No content available for this lesson.</p>';
+                
+                // If content is array of paragraphs or strings
+                if (Array.isArray(content)) {
+                    content = content.join('\n\n');
+                }
 
-                        <!-- Question Card -->
-                        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
-                            <h3 class="text-xl font-bold tracking-tight">${q.question || q.prompt}</h3>
+                if (typeof content !== 'string') {
+                    content = String(content);
+                }
 
-                            <div class="space-y-3">
-                                ${(q.options || []).map((opt, oIdx) => {
-                                    let btnStyle = "border-slate-200 dark:border-slate-800 hover:border-brand-500 bg-white dark:bg-slate-900";
-                                    if (isSubmitted) {
-                                        if (oIdx === correctAns) btnStyle = "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 font-semibold";
-                                        else if (selectedOpt === oIdx) btnStyle = "border-rose-500 bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 font-semibold";
-                                    } else if (selectedOpt === oIdx) {
-                                        btnStyle = "border-brand-600 bg-brand-50 dark:bg-brand-950/40 text-brand-700 dark:text-brand-300 font-semibold";
-                                    }
-                                    return `
-                                        <button onclick="selectAnswer(${currentQIndex}, ${oIdx})" class="w-full text-left p-4 rounded-2xl border-2 transition-all flex items-center justify-between ${btnStyle}">
-                                            <span>${opt}</span>
-                                            <span class="w-6 h-6 rounded-full border border-slate-300 flex items-center justify-center text-xs font-mono">${String.fromCharCode(65 + oIdx)}</span>
-                                        </button>
-                                    `;
-                                }).join('')}
+                const lines = content.split('\n');
+                let html = '';
+                let inList = false;
+                let listType = 'ul';
+
+                for (let i = 0; i < lines.length; i++) {
+                    let line = lines[i].trim();
+
+                    // Headings
+                    if (line.startsWith('# ')) {
+                        if (inList) { html += `</${listType}>`; inList = false; }
+                        html += `<h1 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mt-8 mb-4">${this.escapeHtml(line.substring(2))}</h1>`;
+                        continue;
+                    }
+                    if (line.startsWith('## ')) {
+                        if (inList) { html += `</${listType}>`; inList = false; }
+                        html += `<h2 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mt-6 mb-3">${this.escapeHtml(line.substring(3))}</h2>`;
+                        continue;
+                    }
+                    if (line.startsWith('### ')) {
+                        if (inList) { html += `</${listType}>`; inList = false; }
+                        html += `<h3 class="text-lg md:text-xl font-semibold text-slate-800 dark:text-slate-200 mt-5 mb-2">${this.escapeHtml(line.substring(4))}</h3>`;
+                        continue;
+                    }
+
+                    // Notes / Warnings / Definitions Callouts
+                    if (line.startsWith('> NOTE:') || line.startsWith('>Note:')) {
+                        if (inList) { html += `</${listType}>`; inList = false; }
+                        html += `<div class="my-4 p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 text-blue-900 dark:text-blue-200 text-sm"><strong class="font-semibold"><i class="fa-solid fa-circle-info mr-2"></i>Note:</strong> ${this.escapeHtml(line.replace(/^> ?(NOTE:|Note:)/, '').trim())}</div>`;
+                        continue;
+                    }
+                    if (line.startsWith('> WARNING:') || line.startsWith('>Warning:')) {
+                        if (inList) { html += `</${listType}>`; inList = false; }
+                        html += `<div class="my-4 p-4 rounded-xl bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-500 text-amber-900 dark:text-amber-200 text-sm"><strong class="font-semibold"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Warning:</strong> ${this.escapeHtml(line.replace(/^> ?(WARNING:|Warning:)/, '').trim())}</div>`;
+                        continue;
+                    }
+                    if (line.startsWith('> ')) {
+                        if (inList) { html += `</${listType}>`; inList = false; }
+                        html += `<blockquote class="my-4 pl-4 border-l-4 border-brand-500 italic text-slate-700 dark:text-slate-300">${this.escapeHtml(line.substring(2))}</blockquote>`;
+                        continue;
+                    }
+
+                    // Bullet lists
+                    if (line.startsWith('- ') || line.startsWith('* ')) {
+                        if (!inList || listType !== 'ul') {
+                            if (inList) html += `</${listType}>`;
+                            html += `<ul class="list-disc list-inside space-y-1.5 my-3 text-slate-700 dark:text-slate-300">`;
+                            inList = true;
+                            listType = 'ul';
+                        }
+                        html += `<li>${this.escapeHtml(line.substring(2))}</li>`;
+                        continue;
+                    }
+
+                    // Numbered lists
+                    if (/^\d+\.\s/.test(line)) {
+                        if (!inList || listType !== 'ol') {
+                            if (inList) html += `</${listType}>`;
+                            html += `<ol class="list-decimal list-inside space-y-1.5 my-3 text-slate-700 dark:text-slate-300">`;
+                            inList = true;
+                            listType = 'ol';
+                        }
+                        html += `<li>${this.escapeHtml(line.replace(/^\d+\.\s/, ''))}</li>`;
+                        continue;
+                    }
+
+                    // Empty lines
+                    if (line === '') {
+                        if (inList) { html += `</${listType}>`; inList = false; }
+                        continue;
+                    }
+
+                    // Standard paragraph
+                    if (inList) { html += `</${listType}>`; inList = false; }
+                    html += `<p class="my-3 text-slate-700 dark:text-slate-300 leading-relaxed">${this.escapeHtml(line)}</p>`;
+                }
+
+                if (inList) html += `</${listType}>`;
+                return html;
+            }
+
+            static escapeHtml(text) {
+                const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+                return text.replace(/[&<>"']/g, m => map[m]);
+            }
+        }
+
+        class Router {
+            static init() {
+                window.addEventListener('hashchange', () => this.handleRoute());
+                window.addEventListener('load', () => this.handleRoute());
+            }
+
+            static handleRoute() {
+                const hash = window.location.hash || '#dashboard';
+                const parts = hash.split('/');
+                const route = parts[0];
+
+                // Highlight active nav
+                document.querySelectorAll('.nav-item').forEach(el => {
+                    const r = el.getAttribute('data-route');
+                    if (hash.includes(r)) {
+                        el.classList.add('bg-brand-50', 'dark:bg-brand-900/30', 'text-brand-600', 'dark:text-brand-400');
+                        el.classList.remove('text-slate-600', 'dark:text-slate-300');
+                    } else {
+                        el.classList.remove('bg-brand-50', 'dark:bg-brand-900/30', 'text-brand-600', 'dark:text-brand-400');
+                        el.classList.add('text-slate-600', 'dark:text-slate-300');
+                    }
+                });
+
+                const viewport = document.getElementById('main-viewport');
+
+                if (hash === '#dashboard' || hash === '') {
+                    Renderer.renderDashboard(viewport);
+                } else if (hash === '#subjects') {
+                    Renderer.renderSubjectsList(viewport);
+                } else if (route === '#subject' && parts[1]) {
+                    if (parts[2] === 'lesson' && parts[3]) {
+                        Renderer.renderLessonReader(viewport, parts[1], parts[3]);
+                    } else if (parts[2] === 'flashcards') {
+                        Renderer.renderFlashcards(viewport, parts[1]);
+                    } else if (parts[2] === 'quiz') {
+                        Renderer.renderQuiz(viewport, parts[1]);
+                    } else {
+                        Renderer.renderSubjectDetail(viewport, parts[1]);
+                    }
+                } else if (hash === '#bookmarks') {
+                    Renderer.renderBookmarks(viewport);
+                } else if (hash === '#statistics') {
+                    Renderer.renderStatistics(viewport);
+                } else if (hash === '#settings') {
+                    Renderer.renderSettings(viewport);
+                } else {
+                    Renderer.renderDashboard(viewport);
+                }
+
+                // Close mobile sidebar if open
+                document.getElementById('sidebar').classList.add('-translate-x-full');
+            }
+        }
+
+        class Renderer {
+            static renderDashboard(container) {
+                const subjects = DataManager.getSubjects();
+                const progress = ProgressManager.getProgress();
+                const bookmarks = BookmarksManager.getBookmarks();
+
+                // Compute Stats
+                const totalSubjects = subjects.length;
+                let totalLessons = 0;
+                let completedLessonsCount = Object.keys(progress.completedLessons).filter(k => progress.completedLessons[k]).length;
+                subjects.forEach(s => { if(s.lessons) totalLessons += s.lessons.length; });
+
+                let html = `
+                    <div class="max-w-6xl mx-auto space-y-8 pb-12">
+                        <!-- Welcome Hero Banner -->
+                        <div class="bg-gradient-to-r from-brand-600 to-indigo-700 rounded-3xl p-6 md:p-10 text-white shadow-xl shadow-brand-500/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                            <div class="space-y-2">
+                                <span class="bg-white/20 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Master Reviewer Engine</span>
+                                <h1 class="text-3xl md:text-4xl font-bold">Welcome back to Learning OS</h1>
+                                <p class="text-indigo-100 max-w-xl text-sm md:text-base">Ready to advance your mastery? Explore your subjects, review flashcards, or take comprehensive quizzes.</p>
                             </div>
-
-                            ${isSubmitted && q.explanation ? `
-                                <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-sm">
-                                    <span class="font-bold block mb-1 text-brand-600 dark:text-brand-400">Explanation</span>
-                                    ${q.explanation}
+                            <div class="flex items-center gap-3 bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10">
+                                <div class="w-12 h-12 rounded-xl bg-white text-brand-600 flex items-center justify-center text-xl font-bold">
+                                    <i class="fa-solid fa-trophy"></i>
                                 </div>
-                            ` : ''}
+                                <div>
+                                    <div class="text-xs text-indigo-200 font-medium">Completed Lessons</div>
+                                    <div class="text-xl font-bold">${completedLessonsCount} / ${totalLessons}</div>
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- Navigation & Submit Controls -->
-                        <div class="flex items-center justify-between">
-                            <button onclick="if(currentQIndex > 0) { currentQIndex--; window.renderQuiz(); }" class="px-5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800 ${currentQIndex === 0 ? 'opacity-50 pointer-events-none' : ''}">Previous</button>
-                            
-                            ${currentQIndex === questions.length - 1 && !isSubmitted ? `
-                                <button onclick="submitQuiz()" class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold shadow-md">Submit Quiz</button>
-                            ` : currentQIndex < questions.length - 1 ? `
-                                <button onclick="currentQIndex++; window.renderQuiz();" class="px-6 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold shadow-md">Next Question →</button>
-                            ` : `
-                                <button onclick="router.navigate('lesson-review', { id: '${subjectId}', lessonId: '${lessonId}' })" class="px-6 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-semibold shadow-md">Complete Lesson</button>
-                            `}
+                        <!-- Stats Grid -->
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                                <div class="text-slate-400 text-sm font-medium mb-1">Total Subjects</div>
+                                <div class="text-2xl font-bold text-slate-900 dark:text-white">${totalSubjects}</div>
+                            </div>
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                                <div class="text-slate-400 text-sm font-medium mb-1">Total Lessons</div>
+                                <div class="text-2xl font-bold text-slate-900 dark:text-white">${totalLessons}</div>
+                            </div>
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                                <div class="text-slate-400 text-sm font-medium mb-1">Study Streak</div>
+                                <div class="text-2xl font-bold text-amber-500"><i class="fa-solid fa-fire mr-1"></i>${progress.streak.count} Days</div>
+                            </div>
+                            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                                <div class="text-slate-400 text-sm font-medium mb-1">Quizzes Taken</div>
+                                <div class="text-2xl font-bold text-slate-900 dark:text-white">${progress.quizHistory.length}</div>
+                            </div>
+                        </div>
+
+                        <!-- Subjects Grid Section -->
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <h2 class="text-xl font-bold text-slate-900 dark:text-white">Your Subjects</h2>
+                                <a href="#subjects" class="text-brand-600 dark:text-brand-400 text-sm font-semibold hover:underline">View All</a>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                `;
+
+                subjects.slice(0, 6).forEach(subj => {
+                    const subId = subj.id || subj.name;
+                    const lessonsCount = subj.lessons ? subj.lessons.length : 0;
+                    const iconClass = subj.icon || 'fa-book';
+                    const colorBg = subj.color || 'bg-brand-500';
+
+                    html += `
+                        <div onclick="window.location.hash='#subject/${subId}'" class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="w-12 h-12 rounded-xl ${colorBg} text-white flex items-center justify-center text-xl shadow-md group-hover:scale-105 transition-transform">
+                                        <i class="fa-solid ${iconClass}"></i>
+                                    </div>
+                                    <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">${lessonsCount} Lessons</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">${Renderer.escape(subj.name)}</h3>
+                                <p class="text-slate-500 dark:text-slate-400 text-sm line-clamp-2">${Renderer.escape(subj.description || 'Comprehensive subject reviewer material.')}</p>
+                            </div>
+                            <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-sm font-medium text-brand-600 dark:text-brand-400">
+                                <span>Explore Subject</span>
+                                <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `
+                            </div>
                         </div>
                     </div>
                 `;
-            };
-
-            window.renderQuiz();
-        }
-    </script>
-
-    <script>
-        /**
-         * Bookmarks, Favorites, Statistics & Settings Views
-         */
-        function renderBookmarksView(container) {
-            const state = store.getState();
-            const bookmarks = state.bookmarks || [];
-
-            container.innerHTML = `
-                <div class="max-w-4xl mx-auto space-y-6 pb-12">
-                    <h2 class="text-2xl font-bold tracking-tight">Bookmarks</h2>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">Quickly access your saved lessons and questions.</p>
-                    
-                    ${bookmarks.length === 0 ? `
-                        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-12 text-center space-y-3">
-                            <div class="text-4xl">🔖</div>
-                            <h3 class="font-bold text-lg">No Bookmarks Yet</h3>
-                            <p class="text-sm text-slate-400 max-w-sm mx-auto">Bookmark lessons while studying to access them instantly here.</p>
-                        </div>
-                    ` : `
-                        <div class="grid grid-cols-1 gap-4">
-                            ${bookmarks.map(b => `
-                                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm flex items-center justify-between">
-                                    <div>
-                                        <span class="px-2.5 py-1 rounded bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 text-xs font-semibold uppercase tracking-wider mb-2 inline-block">${b.type}</span>
-                                        <h4 class="font-bold text-base">${b.title || b.id}</h4>
-                                    </div>
-                                    <button onclick="store.toggleBookmark('${b.type}', '${b.id}'); renderBookmarksView(document.getElementById('view-container'));" class="text-xs text-rose-500 font-medium hover:underline">Remove</button>
-                                </div>
-                            `).join('')}
-                        </div>
-                    `}
-                </div>
-            `;
-        }
-
-        function renderFavoritesView(container) {
-            const state = store.getState();
-            const favorites = state.favorites || [];
-
-            container.innerHTML = `
-                <div class="max-w-4xl mx-auto space-y-6 pb-12">
-                    <h2 class="text-2xl font-bold tracking-tight">Favorites</h2>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">Your favorite subjects and materials.</p>
-                    
-                    ${favorites.length === 0 ? `
-                        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-12 text-center space-y-3">
-                            <div class="text-4xl">❤️</div>
-                            <h3 class="font-bold text-lg">No Favorites Yet</h3>
-                            <p class="text-sm text-slate-400 max-w-sm mx-auto">Mark subjects as favorites to keep them pinned here.</p>
-                        </div>
-                    ` : `
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            ${favorites.map(f => {
-                                const sub = getSubject(f.id);
-                                return `
-                                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm flex items-center justify-between cursor-pointer" onclick="router.navigate('subject-detail', { id: '${f.id}' })">
-                                        <div>
-                                            <h4 class="font-bold text-lg">${sub ? sub.name : f.id}</h4>
-                                            <p class="text-xs text-slate-400 mt-1">Subject</p>
-                                        </div>
-                                        <span>→</span>
-                                    </div>
-                                `;
-                            }).join('')}
-                        </div>
-                    `}
-                </div>
-            `;
-        }
-
-        function renderStatisticsView(container) {
-            const state = store.getState();
-            const completedCount = Object.values(state.progress).filter(p => p.completed).length;
-
-            container.innerHTML = `
-                <div class="max-w-4xl mx-auto space-y-6 pb-12">
-                    <h2 class="text-2xl font-bold tracking-tight">Statistics & Progress</h2>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">Track your learning consistency and completed milestones.</p>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
-                            <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Study Streak</div>
-                            <div class="text-3xl font-bold mt-2 text-amber-500">${state.streak.count} Days</div>
-                        </div>
-                        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
-                            <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Lessons Completed</div>
-                            <div class="text-3xl font-bold mt-2 text-emerald-500">${completedCount}</div>
-                        </div>
-                        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
-                            <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Bookmarks Saved</div>
-                            <div class="text-3xl font-bold mt-2 text-brand-600">${(state.bookmarks || []).length}</div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function renderSettingsView(container) {
-            container.innerHTML = `
-                <div class="max-w-2xl mx-auto space-y-6 pb-12">
-                    <h2 class="text-2xl font-bold tracking-tight">Settings</h2>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">Manage your preferences and local storage data.</p>
-
-                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-6">
-                        <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
-                            <div>
-                                <h4 class="font-bold text-sm">Theme Mode</h4>
-                                <p class="text-xs text-slate-400">Switch between light and dark themes</p>
-                            </div>
-                            <button onclick="themeManager.toggle()" class="px-4 py-2 rounded-xl bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 text-xs font-semibold">Toggle Theme</button>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <h4 class="font-bold text-sm text-rose-600">Reset Local Progress</h4>
-                                <p class="text-xs text-slate-400">Clears all streaks, quiz scores, and bookmarks</p>
-                            </div>
-                            <button onclick="if(confirm('Are you sure you want to reset all progress?')) { localStorage.clear(); location.reload(); }" class="px-4 py-2 rounded-xl bg-rose-50 dark:bg-rose-950 text-rose-600 text-xs font-semibold">Reset Data</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-    </script>
-
-    <script>
-        /**
-         * Global Search Engine
-         */
-        function openSearchModal() {
-            document.getElementById('search-modal').classList.remove('hidden');
-            document.getElementById('search-modal').classList.add('flex');
-            document.getElementById('global-search-input').focus();
-        }
-
-        function closeSearchModal() {
-            document.getElementById('search-modal').classList.remove('flex');
-            document.getElementById('search-modal').classList.add('hidden');
-        }
-
-        function handleGlobalSearch(query) {
-            const resultsContainer = document.getElementById('search-results-container');
-            if (!query || query.trim().length === 0) {
-                resultsContainer.innerHTML = `<div class="text-center py-8 text-sm text-slate-400">Type to start searching...</div>`;
-                return;
+                container.innerHTML = html;
             }
 
-            const q = query.toLowerCase();
-            let matches = [];
+            static renderSubjectsList(container) {
+                const subjects = DataManager.getSubjects();
+                let html = `
+                    <div class="max-w-6xl mx-auto space-y-6 pb-12">
+                        <div>
+                            <h1 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">All Subjects</h1>
+                            <p class="text-slate-500 dark:text-slate-400 text-sm">Select a subject to dive into lessons, flashcards, and quizzes.</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                `;
 
-            getSubjects().forEach(sub => {
-                if (sub.name.toLowerCase().includes(q)) {
-                    matches.push({ type: 'Subject', title: sub.name, action: () => { closeSearchModal(); router.navigate('subject-detail', { id: sub.id || sub.name }); } });
+                subjects.forEach(subj => {
+                    const subId = subj.id || subj.name;
+                    const lessonsCount = subj.lessons ? subj.lessons.length : 0;
+                    const iconClass = subj.icon || 'fa-book';
+                    const colorBg = subj.color || 'bg-brand-500';
+
+                    html += `
+                        <div onclick="window.location.hash='#subject/${subId}'" class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="w-12 h-12 rounded-xl ${colorBg} text-white flex items-center justify-center text-xl shadow-md group-hover:scale-105 transition-transform">
+                                        <i class="fa-solid ${iconClass}"></i>
+                                    </div>
+                                    <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">${lessonsCount} Lessons</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">${Renderer.escape(subj.name)}</h3>
+                                <p class="text-slate-500 dark:text-slate-400 text-sm line-clamp-2">${Renderer.escape(subj.description || 'Comprehensive subject reviewer material.')}</p>
+                            </div>
+                            <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-sm font-medium text-brand-600 dark:text-brand-400">
+                                <span>View Lessons</span>
+                                <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `</div></div>`;
+                container.innerHTML = html;
+            }
+
+            static renderSubjectDetail(container, subjectId) {
+                const subject = DataManager.getSubject(subjectId);
+                if (!subject) {
+                    container.innerHTML = `<div class="text-center py-20"><h2 class="text-xl font-bold text-slate-700">Subject not found.</h2><a href="#subjects" class="text-brand-600 underline mt-2 inline-block">Back to Subjects</a></div>`;
+                    return;
                 }
-                if (sub.lessons) {
-                    sub.lessons.forEach(l => {
-                        if (l.title.toLowerCase().includes(q) || (l.description && l.description.toLowerCase().includes(q))) {
-                            matches.push({ type: 'Lesson', title: l.title, subtitle: sub.name, action: () => { closeSearchModal(); router.navigate('lesson-review', { id: sub.id || sub.name, lessonId: l.id || l.title }); } });
-                        }
+
+                const progress = ProgressManager.getProgress();
+                const lessons = subject.lessons || [];
+
+                let html = `
+                    <div class="max-w-4xl mx-auto space-y-6 pb-12">
+                        <div class="flex items-center space-x-2 text-sm text-slate-500 dark:text-slate-400">
+                            <a href="#subjects" class="hover:underline">Subjects</a>
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                            <span class="text-slate-900 dark:text-white font-medium">${Renderer.escape(subject.name)}</span>
+                        </div>
+
+                        <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-6 md:p-8 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-16 h-16 rounded-2xl ${subject.color || 'bg-brand-500'} text-white flex items-center justify-center text-2xl shadow-lg">
+                                    <i class="fa-solid ${subject.icon || 'fa-book'}"></i>
+                                </div>
+                                <div>
+                                    <h1 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">${Renderer.escape(subject.name)}</h1>
+                                    <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">${Renderer.escape(subject.description || '')}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3 w-full md:w-auto">
+                                <a href="#subject/${subjectId}/flashcards" class="flex-1 md:flex-initial px-4 py-2.5 bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-300 font-semibold rounded-xl text-center hover:bg-brand-100 transition-colors">
+                                    <i class="fa-solid fa-clone mr-2"></i>Flashcards
+                                </a>
+                                <a href="#subject/${subjectId}/quiz" class="flex-1 md:flex-initial px-4 py-2.5 bg-brand-600 text-white font-semibold rounded-xl text-center hover:bg-brand-700 transition-colors shadow-md shadow-brand-500/20">
+                                    <i class="fa-solid fa-brain mr-2"></i>Subject Quiz
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <h2 class="text-xl font-bold text-slate-900 dark:text-white">Lessons (${lessons.length})</h2>
+                            <div class="space-y-3">
+                `;
+
+                if (lessons.length === 0) {
+                    html += `<div class="bg-white dark:bg-slate-800 rounded-2xl p-8 text-center text-slate-400 border border-slate-200 dark:border-slate-700">No lessons available for this subject yet.</div>`;
+                } else {
+                    lessons.forEach((lesson, index) => {
+                        const lessonId = lesson.id || lesson.title;
+                        const isCompleted = !!progress.completedLessons[lessonId];
+                        const isBookmarked = BookmarksManager.isBookmarked('lessons', lessonId);
+
+                        html += `
+                            <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5 flex items-center justify-between gap-4 shadow-sm hover:border-brand-500 transition-all">
+                                <div class="flex items-center space-x-4 min-w-0">
+                                    <div class="w-10 h-10 rounded-xl ${isCompleted ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400' : 'bg-slate-100 dark:bg-slate-700 text-slate-500'} flex items-center justify-center font-bold text-sm shrink-0">
+                                        ${isCompleted ? '<i class="fa-solid fa-check"></i>' : (index + 1)}
+                                    </div>
+                                    <div class="min-w-0">
+                                        <h3 class="font-bold text-slate-900 dark:text-white truncate">${Renderer.escape(lesson.title)}</h3>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 truncate">${Renderer.escape(lesson.description || 'Digital textbook lesson material.')}</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-3 shrink-0">
+                                    <button onclick="Renderer.toggleBookmark('lessons', '${lessonId}')" class="w-9 h-9 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 ${isBookmarked ? 'text-amber-500' : 'text-slate-400'} flex items-center justify-center transition-colors">
+                                        <i class="fa-${isBookmarked ? 'solid' : 'regular'} fa-bookmark"></i>
+                                    </button>
+                                    <a href="#subject/${subjectId}/lesson/${lessonId}" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white font-medium text-sm rounded-xl transition-colors shadow-sm">
+                                        Read
+                                    </a>
+                                </div>
+                            </div>
+                        `;
                     });
+                }
+
+                html += `</div></div></div>`;
+                container.innerHTML = html;
+            }
+
+            static renderLessonReader(container, subjectId, lessonId) {
+                const subject = DataManager.getSubject(subjectId);
+                const lesson = DataManager.getLesson(subjectId, lessonId);
+
+                if (!subject || !lesson) {
+                    container.innerHTML = `<div class="text-center py-20"><h2 class="text-xl font-bold text-slate-700">Lesson not found.</h2><a href="#subject/${subjectId}" class="text-brand-600 underline mt-2 inline-block">Back to Subject</a></div>`;
+                    return;
+                }
+
+                const isCompleted = !!ProgressManager.getProgress().completedLessons[lessonId];
+                const isBookmarked = BookmarksManager.isBookmarked('lessons', lessonId);
+                const parsedContent = ContentParser.parse(lesson.content);
+
+                // Find prev and next lessons
+                const lessons = subject.lessons || [];
+                const currentIndex = lessons.findIndex(l => (l.id || l.title) === lessonId);
+                const prevLesson = currentIndex > 0 ? lessons[currentIndex - 1] : null;
+                const nextLesson = currentIndex < lessons.length - 1 ? lessons[currentIndex + 1] : null;
+
+                let html = `
+                    <div class="max-w-3xl mx-auto space-y-8 pb-20">
+                        <!-- Top Navigation bar -->
+                        <div class="flex items-center justify-between">
+                            <a href="#subject/${subjectId}" class="inline-flex items-center space-x-2 text-sm text-slate-500 dark:text-slate-400 hover:text-brand-600 transition-colors">
+                                <i class="fa-solid fa-arrow-left"></i>
+                                <span>Back to ${Renderer.escape(subject.name)}</span>
+                            </a>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="Renderer.toggleBookmark('lessons', '${lessonId}')" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-sm font-medium ${isBookmarked ? 'text-amber-500 border-amber-300' : 'text-slate-600 dark:text-slate-300'} hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+                                    <i class="fa-${isBookmarked ? 'solid' : 'regular'} fa-bookmark mr-1.5"></i> Bookmark
+                                </button>
+                                <button onclick="Renderer.toggleComplete('${lessonId}')" id="complete-btn" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-sm font-medium ${isCompleted ? 'bg-emerald-50 text-emerald-600 border-emerald-300 dark:bg-emerald-900/30 dark:text-emerald-400' : 'text-slate-600 dark:text-slate-300'} hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+                                    <i class="fa-solid fa-check mr-1.5"></i> ${isCompleted ? 'Completed' : 'Mark Complete'}
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Lesson Header -->
+                        <div class="space-y-3">
+                            <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white leading-tight">${Renderer.escape(lesson.title)}</h1>
+                            ${lesson.description ? `<p class="text-lg text-slate-600 dark:text-slate-300">${Renderer.escape(lesson.description)}</p>` : ''}
+                        </div>
+
+                        <!-- Textbook Content Body -->
+                        <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-6 md:p-10 shadow-sm space-y-6">
+                            <div class="prose dark:prose-invert max-w-none">
+                                ${parsedContent}
+                            </div>
+                        </div>
+
+                        <!-- Lesson Navigation Bottom -->
+                        <div class="flex items-center justify-between pt-6 border-t border-slate-200 dark:border-slate-700">
+                            ${prevLesson ? `<a href="#subject/${subjectId}/lesson/${prevLesson.id || prevLesson.title}" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-medium text-sm hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"><i class="fa-solid fa-chevron-left mr-2"></i> Previous Lesson</a>` : '<div></div>'}
+                            ${nextLesson ? `<a href="#subject/${subjectId}/lesson/${nextLesson.id || nextLesson.title}" class="px-4 py-2.5 rounded-xl bg-brand-600 text-white font-medium text-sm hover:bg-brand-700 transition-colors shadow-sm">Next Lesson <i class="fa-solid fa-chevron-right ml-2"></i></a>` : '<div></div>'}
+                        </div>
+                    </div>
+                `;
+                container.innerHTML = html;
+            }
+
+            static renderFlashcards(container, subjectId) {
+                const subject = DataManager.getSubject(subjectId);
+                if (!subject) return;
+
+                let cards = [];
+                if (subject.lessons) {
+                    subject.lessons.forEach(l => {
+                        if (l.flashcards) cards.push(...l.flashcards);
+                    });
+                }
+
+                if (cards.length === 0) {
+                    container.innerHTML = `<div class="max-w-xl mx-auto text-center py-20 space-y-4"><h2 class="text-xl font-bold text-slate-700">No Flashcards Available</h2><p class="text-slate-500 text-sm">This subject does not have any flashcards yet.</p><a href="#subject/${subjectId}" class="inline-block px-4 py-2 bg-brand-600 text-white rounded-xl text-sm font-medium">Back to Subject</a></div>`;
+                    return;
+                }
+
+                window._currentFlashcards = cards;
+                window._flashcardIndex = 0;
+                window._isFlipped = false;
+
+                let html = `
+                    <div class="max-w-2xl mx-auto space-y-6 pb-12">
+                        <div class="flex items-center justify-between">
+                            <a href="#subject/${subjectId}" class="inline-flex items-center space-x-2 text-sm text-slate-500 dark:text-slate-400 hover:text-brand-600 transition-colors">
+                                <i class="fa-solid fa-arrow-left"></i>
+                                <span>Back to ${Renderer.escape(subject.name)}</span>
+                            </a>
+                            <span id="fc-counter" class="text-sm font-semibold text-slate-500 dark:text-slate-400">Card 1 of ${cards.length}</span>
+                        </div>
+
+                        <!-- Flashcard Card Container -->
+                        <div onclick="Renderer.flipFlashcard()" class="perspective-1000 w-full h-80 cursor-pointer select-none">
+                            <div id="flashcard-inner" class="relative w-full h-full duration-500 transform-style-3d shadow-xl rounded-3xl">
+                                <!-- Front -->
+                                <div class="absolute inset-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-8 flex flex-col items-center justify-center text-center backface-hidden">
+                                    <span class="text-xs uppercase font-bold tracking-wider text-brand-600 dark:text-brand-400 mb-4">Question / Term</span>
+                                    <h3 id="fc-front-text" class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">${Renderer.escape(cards[0].front || cards[0].question || '')}</h3>
+                                    <span class="absolute bottom-6 text-xs text-slate-400"><i class="fa-solid fa-rotate mr-1"></i> Click to flip</span>
+                                </div>
+                                <!-- Back -->
+                                <div class="absolute inset-0 bg-brand-600 text-white rounded-3xl p-8 flex flex-col items-center justify-center text-center backface-hidden rotate-y-180">
+                                    <span class="text-xs uppercase font-bold tracking-wider text-indigo-200 mb-4">Answer / Definition</span>
+                                    <h3 id="fc-back-text" class="text-xl md:text-2xl font-bold">${Renderer.escape(cards[0].back || cards[0].answer || '')}</h3>
+                                    <span class="absolute bottom-6 text-xs text-indigo-200"><i class="fa-solid fa-rotate mr-1"></i> Click to flip back</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Controls -->
+                        <div class="flex items-center justify-center space-x-4">
+                            <button onclick="Renderer.prevFlashcard()" class="px-5 py-3 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm">
+                                <i class="fa-solid fa-arrow-left mr-2"></i> Previous
+                            </button>
+                            <button onclick="Renderer.shuffleFlashcards()" class="px-4 py-3 rounded-2xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-medium hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors" title="Shuffle Cards">
+                                <i class="fa-solid fa-shuffle"></i>
+                            </button>
+                            <button onclick="Renderer.nextFlashcard()" class="px-5 py-3 rounded-2xl bg-brand-600 text-white font-semibold hover:bg-brand-700 transition-colors shadow-md shadow-brand-500/20">
+                                Next <i class="fa-solid fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML = html;
+            }
+
+            static flipFlashcard() {
+                window._isFlipped = !window._isFlipped;
+                const inner = document.getElementById('flashcard-inner');
+                if (inner) {
+                    if (window._isFlipped) {
+                        inner.style.transform = 'rotateY(180deg)';
+                    } else {
+                        inner.style.transform = 'rotateY(0deg)';
+                    }
+                }
+            }
+
+            static nextFlashcard() {
+                if (!window._currentFlashcards) return;
+                window._flashcardIndex = (window._flashcardIndex + 1) % window._currentFlashcards.length;
+                Renderer.updateFlashcardView();
+            }
+
+            static prevFlashcard() {
+                if (!window._currentFlashcards) return;
+                window._flashcardIndex = (window._flashcardIndex - 1 + window._currentFlashcards.length) % window._currentFlashcards.length;
+                Renderer.updateFlashcardView();
+            }
+
+            static shuffleFlashcards() {
+                if (!window._currentFlashcards) return;
+                for (let i = window._currentFlashcards.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [window._currentFlashcards[i], window._currentFlashcards[j]] = [window._currentFlashcards[j], window._currentFlashcards[i]];
+                }
+                window._flashcardIndex = 0;
+                Renderer.updateFlashcardView();
+            }
+
+            static updateFlashcardView() {
+                window._isFlipped = false;
+                const inner = document.getElementById('flashcard-inner');
+                if (inner) inner.style.transform = 'rotateY(0deg)';
+
+                const card = window._currentFlashcards[window._flashcardIndex];
+                document.getElementById('fc-front-text').textContent = card.front || card.question || '';
+                document.getElementById('fc-back-text').textContent = card.back || card.answer || '';
+                document.getElementById('fc-counter').textContent = `Card ${window._flashcardIndex + 1} of ${window._currentFlashcards.length}`;
+            }
+
+            static renderQuiz(container, subjectId) {
+                const subject = DataManager.getSubject(subjectId);
+                if (!subject) return;
+
+                let questions = [];
+                if (subject.lessons) {
+                    subject.lessons.forEach(l => {
+                        if (l.questions) questions.push(...l.questions);
+                    });
+                }
+
+                if (questions.length === 0) {
+                    container.innerHTML = `<div class="max-w-xl mx-auto text-center py-20 space-y-4"><h2 class="text-xl font-bold text-slate-700">No Quiz Questions Available</h2><p class="text-slate-500 text-sm">This subject does not have any quiz questions yet.</p><a href="#subject/${subjectId}" class="inline-block px-4 py-2 bg-brand-600 text-white rounded-xl text-sm font-medium">Back to Subject</a></div>`;
+                    return;
+                }
+
+                window._quizQuestions = questions;
+                window._quizIndex = 0;
+                window._quizScore = 0;
+                window._quizAnswers = {};
+
+                Renderer.renderCurrentQuizQuestion(container, subjectId);
+            }
+
+            static renderCurrentQuizQuestion(container, subjectId) {
+                const questions = window._quizQuestions;
+                const index = window._quizIndex;
+
+                if (index >= questions.length) {
+                    // Show Quiz Results
+                    const score = window._quizScore;
+                    const total = questions.length;
+                    const percentage = Math.round((score / total) * 100);
+
+                    ProgressManager.recordQuizResult({ subjectId, score, total, percentage });
+
+                    container.innerHTML = `
+                        <div class="max-w-xl mx-auto bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-8 text-center space-y-6 shadow-xl">
+                            <div class="w-20 h-20 bg-brand-100 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 rounded-full flex items-center justify-center text-3xl mx-auto">
+                                <i class="fa-solid fa-award"></i>
+                            </div>
+                            <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Quiz Completed!</h2>
+                            <div class="text-4xl font-extrabold text-brand-600 dark:text-brand-400">${percentage}%</div>
+                            <p class="text-slate-600 dark:text-slate-300">You scored ${score} out of ${total} correct answers.</p>
+                            <div class="flex items-center justify-center gap-4 pt-4">
+                                <a href="#subject/${subjectId}" class="px-5 py-3 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-sm hover:bg-slate-200 transition-colors">Back to Subject</a>
+                                <button onclick="Renderer.renderQuiz(document.getElementById('main-viewport'), '${subjectId}')" class="px-5 py-3 rounded-xl bg-brand-600 text-white font-semibold text-sm hover:bg-brand-700 transition-colors shadow-md">Try Again</button>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const q = questions[index];
+                let choicesHtml = '';
+
+                // Handle different question types gracefully (Multiple Choice, True/False, Identification, etc.)
+                if (q.choices && Array.isArray(q.choices)) {
+                    q.choices.forEach((choice, cIdx) => {
+                        choicesHtml += `
+                            <button onclick="Renderer.submitQuizAnswer(${index}, '${Renderer.escape(choice)}', '${Renderer.escape(q.answer || q.correct || '')}')" class="w-full text-left p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-brand-500 hover:bg-brand-50/50 dark:hover:bg-brand-900/10 font-medium text-slate-800 dark:text-slate-200 transition-all flex items-center justify-between group">
+                                <span>${Renderer.escape(choice)}</span>
+                                <div class="w-6 h-6 rounded-full border border-slate-300 dark:border-slate-600 flex items-center justify-center group-hover:border-brand-500 group-hover:text-brand-500 text-xs"></div>
+                            </button>
+                        `;
+                    });
+                } else {
+                    // Open answer / Identification fallback
+                    choicesHtml = `
+                        <div class="space-y-3">
+                            <input type="text" id="quiz-text-answer" placeholder="Type your answer here..." class="w-full p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white outline-none focus:border-brand-500">
+                            <button onclick="Renderer.submitQuizTextAnswer(${index}, '${Renderer.escape(q.answer || q.correct || '')}')" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl transition-colors">Submit Answer</button>
+                        </div>
+                    `;
+                }
+
+                container.innerHTML = `
+                    <div class="max-w-2xl mx-auto space-y-6 pb-12">
+                        <div class="flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
+                            <a href="#subject/${subjectId}" class="hover:underline"><i class="fa-solid fa-arrow-left mr-1"></i> Exit Quiz</a>
+                            <span class="font-semibold">Question ${index + 1} of ${questions.length}</span>
+                        </div>
+
+                        <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-6 md:p-8 shadow-sm space-y-6">
+                            <h2 class="text-xl font-bold text-slate-900 dark:text-white">${Renderer.escape(q.question || q.prompt || '')}</h2>
+                            <div class="space-y-3" id="quiz-choices-container">
+                                ${choicesHtml}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            static submitQuizAnswer(index, chosen, correct) {
+                const isCorrect = chosen.trim().toLowerCase() === correct.trim().toLowerCase();
+                if (isCorrect) window._quizScore++;
+
+                window._quizIndex++;
+                const hash = window.location.hash;
+                const subjectId = hash.split('/')[1];
+                Renderer.renderCurrentQuizQuestion(document.getElementById('main-viewport'), subjectId);
+            }
+
+            static submitQuizTextAnswer(index, correct) {
+                const val = document.getElementById('quiz-text-answer').value;
+                Renderer.submitQuizAnswer(index, val, correct);
+            }
+
+            static renderBookmarks(container) {
+                const bookmarks = BookmarksManager.getBookmarks();
+                const subjects = DataManager.getSubjects();
+
+                let bookmarkedLessons = [];
+                subjects.forEach(s => {
+                    if (s.lessons) {
+                        s.lessons.forEach(l => {
+                            const lId = l.id || l.title;
+                            if (bookmarks.lessons[lId]) {
+                                bookmarkedLessons.push({ ...l, subjectId: s.id || s.name, subjectName: s.name });
+                            }
+                        });
+                    }
+                });
+
+                let html = `
+                    <div class="max-w-4xl mx-auto space-y-6 pb-12">
+                        <div>
+                            <h1 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">Bookmarks</h1>
+                            <p class="text-slate-500 dark:text-slate-400 text-sm">Quickly access your bookmarked lessons and study materials.</p>
+                        </div>
+                        <div class="space-y-3">
+                `;
+
+                if (bookmarkedLessons.length === 0) {
+                    html += `<div class="bg-white dark:bg-slate-800 rounded-2xl p-12 text-center text-slate-400 border border-slate-200 dark:border-slate-700">No bookmarked lessons found. Click the bookmark icon on any lesson to save it here.</div>`;
+                } else {
+                    bookmarkedLessons.forEach(l => {
+                        html += `
+                            <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5 flex items-center justify-between gap-4 shadow-sm">
+                                <div>
+                                    <span class="text-xs font-semibold text-brand-600 dark:text-brand-400 uppercase tracking-wider">${Renderer.escape(l.subjectName)}</span>
+                                    <h3 class="font-bold text-slate-900 dark:text-white mt-0.5">${Renderer.escape(l.title)}</h3>
+                                </div>
+                                <a href="#subject/${l.subjectId}/lesson/${l.id || l.title}" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white font-medium text-sm rounded-xl transition-colors shadow-sm">
+                                    Read
+                                </a>
+                            </div>
+                        `;
+                    });
+                }
+
+                html += `</div></div>`;
+                container.innerHTML = html;
+            }
+
+            static renderStatistics(container) {
+                const progress = ProgressManager.getProgress();
+                const totalQuizzes = progress.quizHistory.length;
+                let avgScore = 0;
+                if (totalQuizzes > 0) {
+                    const sum = progress.quizHistory.reduce((acc, curr) => acc + curr.percentage, 0);
+                    avgScore = Math.round(sum / totalQuizzes);
+                }
+                const completedCount = Object.keys(progress.completedLessons).filter(k => progress.completedLessons[k]).length;
+
+                let html = `
+                    <div class="max-w-4xl mx-auto space-y-6 pb-12">
+                        <div>
+                            <h1 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">Study Statistics</h1>
+                            <p class="text-slate-500 dark:text-slate-400 text-sm">Review your learning performance, streaks, and quiz history.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2">
+                                <div class="text-slate-400 text-sm font-medium">Study Streak</div>
+                                <div class="text-3xl font-extrabold text-amber-500"><i class="fa-solid fa-fire mr-2"></i>${progress.streak.count} Days</div>
+                            </div>
+                            <div class="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2">
+                                <div class="text-slate-400 text-sm font-medium">Completed Lessons</div>
+                                <div class="text-3xl font-extrabold text-slate-900 dark:text-white">${completedCount}</div>
+                            </div>
+                            <div class="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2">
+                                <div class="text-slate-400 text-sm font-medium">Average Quiz Score</div>
+                                <div class="text-3xl font-extrabold text-brand-600 dark:text-brand-400">${avgScore}%</div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-6 md:p-8 shadow-sm space-y-4">
+                            <h2 class="text-xl font-bold text-slate-900 dark:text-white">Quiz History</h2>
+                `;
+
+                if (totalQuizzes === 0) {
+                    html += `<p class="text-slate-400 text-sm">No quizzes taken yet.</p>`;
+                } else {
+                    html += `<div class="space-y-3">`;
+                    progress.quizHistory.slice().reverse().forEach(qh => {
+                        html += `
+                            <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                                <div>
+                                    <div class="font-bold text-slate-900 dark:text-white">Subject Quiz: ${qh.subjectId}</div>
+                                    <div class="text-xs text-slate-400 mt-0.5">${new Date(qh.date).toLocaleDateString()}</div>
+                                </div>
+                                <div class="text-lg font-bold text-brand-600 dark:text-brand-400">${qh.percentage}% (${qh.score}/${qh.total})</div>
+                            </div>
+                        `;
+                    });
+                    html += `</div>`;
+                }
+
+                html += `</div></div>`;
+                container.innerHTML = html;
+            }
+
+            static renderSettings(container) {
+                const currentTheme = StorageManager.get('theme', 'system');
+
+                let html = `
+                    <div class="max-w-2xl mx-auto space-y-6 pb-12">
+                        <div>
+                            <h1 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">Settings</h1>
+                            <p class="text-slate-500 dark:text-slate-400 text-sm">Configure your preferences and manage application data.</p>
+                        </div>
+
+                        <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-6 md:p-8 shadow-sm space-y-6">
+                            <div>
+                                <h3 class="font-bold text-slate-900 dark:text-white mb-2">Appearance Theme</h3>
+                                <div class="grid grid-cols-3 gap-3">
+                                    <button onclick="ThemeManager.apply('light'); Renderer.renderSettings(document.getElementById('main-viewport'));" class="p-4 rounded-2xl border ${currentTheme === 'light' ? 'border-brand-500 bg-brand-50 dark:bg-brand-900/20 text-brand-600' : 'border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300'} font-medium text-center">Light</button>
+                                    <button onclick="ThemeManager.apply('dark'); Renderer.renderSettings(document.getElementById('main-viewport'));" class="p-4 rounded-2xl border ${currentTheme === 'dark' ? 'border-brand-500 bg-brand-50 dark:bg-brand-900/20 text-brand-600' : 'border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300'} font-medium text-center">Dark</button>
+                                    <button onclick="ThemeManager.apply('system'); Renderer.renderSettings(document.getElementById('main-viewport'));" class="p-4 rounded-2xl border ${currentTheme === 'system' ? 'border-brand-500 bg-brand-50 dark:bg-brand-900/20 text-brand-600' : 'border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300'} font-medium text-center">System</button>
+                                </div>
+                            </div>
+
+                            <div class="pt-6 border-t border-slate-100 dark:border-slate-700">
+                                <h3 class="font-bold text-slate-900 dark:text-white mb-2">Data Management</h3>
+                                <button onclick="localStorage.clear(); location.reload();" class="px-4 py-2.5 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 font-semibold text-sm hover:bg-red-100 transition-colors">
+                                    Reset All Progress & Data
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML = html;
+            }
+
+            static toggleBookmark(type, id) {
+                BookmarksManager.toggleBookmark(type, id);
+                // Re-render current view if possible or toggle UI element
+                Router.handleRoute();
+            }
+
+            static toggleComplete(lessonId) {
+                const progress = ProgressManager.getProgress();
+                const isCompleted = !!progress.completedLessons[lessonId];
+                ProgressManager.markLessonComplete(lessonId, !isCompleted);
+                Router.handleRoute();
+            }
+
+            static escape(text) {
+                if (!text) return '';
+                const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+                return String(text).replace(/[&<>"']/g, m => map[m]);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!DataManager.validateAndInit()) return;
+
+            ThemeManager.init();
+            Router.init();
+
+            // Mobile menu toggle
+            const sidebar = document.getElementById('sidebar');
+            document.getElementById('mobile-toggle').addEventListener('click', () => {
+                sidebar.classList.remove('-translate-x-full');
+            });
+            document.getElementById('mobile-close-sidebar').addEventListener('click', () => {
+                sidebar.classList.add('-translate-x-full');
+            });
+
+            // Theme toggle button
+            document.getElementById('theme-toggle').addEventListener('click', () => {
+                ThemeManager.toggle();
+            });
+
+            // Search Modal
+            const searchModal = document.getElementById('search-modal');
+            const searchInput = document.getElementById('global-search-input');
+            const searchResults = document.getElementById('search-results');
+
+            document.getElementById('search-trigger').addEventListener('click', () => {
+                searchModal.classList.remove('hidden');
+                searchInput.focus();
+            });
+            document.getElementById('search-close').addEventListener('click', () => {
+                searchModal.classList.add('hidden');
+            });
+            searchModal.addEventListener('click', (e) => {
+                if (e.target === searchModal) searchModal.classList.add('hidden');
+            });
+
+            // Keyboard shortcut ⌘K / Ctrl+K
+            window.addEventListener('keydown', (e) => {
+                if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                    e.preventDefault();
+                    searchModal.classList.remove('hidden');
+                    searchInput.focus();
+                }
+                if (e.key === 'Escape') {
+                    searchModal.classList.add('hidden');
                 }
             });
 
-            if (matches.length === 0) {
-                resultsContainer.innerHTML = `<div class="text-center py-8 text-sm text-slate-400">No matching results found for "${query}"</div>`;
-                return;
-            }
+            // Instant Search Implementation
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.trim().toLowerCase();
+                if (!query) {
+                    searchResults.innerHTML = `<div class="text-center py-12 text-slate-400"><i class="fa-solid fa-compass text-3xl mb-2 opacity-40"></i><p class="text-sm">Start typing to search across all educational content.</p></div>`;
+                    return;
+                }
 
-            resultsContainer.innerHTML = matches.map((m, idx) => `
-                <div onclick="window.searchResultsActions[${idx}]()" class="p-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer flex items-center justify-between">
-                    <div>
-                        <span class="px-2 py-0.5 rounded bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 text-xs font-semibold mr-2">${m.type}</span>
-                        <span class="font-medium text-sm">${m.title}</span>
-                        ${m.subtitle ? `<span class="text-xs text-slate-400 block mt-0.5">${m.subtitle}</span>` : ''}
-                    </div>
-                    <span>→</span>
-                </div>
-            `).join('');
+                const subjects = DataManager.getSubjects();
+                let matches = [];
 
-            window.searchResultsActions = matches.map(m => m.action);
-        }
+                subjects.forEach(sub => {
+                    const subId = sub.id || sub.name;
+                    if (sub.name.toLowerCase().includes(query) || (sub.description && sub.description.toLowerCase().includes(query))) {
+                        matches.push({ type: 'Subject', title: sub.name, link: `#subject/${subId}`, snippet: sub.description || '' });
+                    }
+                    if (sub.lessons) {
+                        sub.lessons.forEach(l => {
+                            const lId = l.id || l.title;
+                            if (l.title.toLowerCase().includes(query) || (l.content && l.content.toLowerCase().includes(query))) {
+                                matches.push({ type: 'Lesson', title: l.title, link: `#subject/${subId}/lesson/${lId}`, snippet: l.description || sub.name });
+                            }
+                        });
+                    }
+                });
 
-        // Keyboard Shortcuts
-        window.addEventListener('keydown', (e) => {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-                e.preventDefault();
-                openSearchModal();
-            }
-            if (e.key === 'Escape') {
-                closeSearchModal();
-            }
-        });
+                if (matches.length === 0) {
+                    searchResults.innerHTML = `<div class="text-center py-12 text-slate-400"><i class="fa-solid fa-face-frown text-3xl mb-2 opacity-40"></i><p class="text-sm">No results found for "${Renderer.escape(query)}".</p></div>`;
+                    return;
+                }
 
-        // App Initialization
-        window.addEventListener('DOMContentLoaded', () => {
-            if (!validateReviewerData()) return;
-
-            themeManager.init();
-
-            // Parse initial route from hash
-            const hash = window.location.hash.replace('#', '');
-            if (hash) {
-                const parts = hash.split('/');
-                router.navigate(parts[0], { id: parts[1], lessonId: parts[2] });
-            } else {
-                router.navigate('home');
-            }
-
-            document.getElementById('app-shell').classList.remove('hidden');
+                let html = '';
+                matches.slice(0, 15).forEach(m => {
+                    html += `
+                        <div onclick="searchModal.classList.add('hidden'); window.location.hash='${m.link}';" class="p-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700/50 cursor-pointer transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-600">
+                            <div class="flex items-center space-x-2 text-xs font-semibold text-brand-600 dark:text-brand-400 uppercase tracking-wider">
+                                <i class="fa-solid fa-bookmark"></i>
+                                <span>${m.type}</span>
+                            </div>
+                            <div class="font-bold text-slate-900 dark:text-white mt-0.5">${Renderer.escape(m.title)}</div>
+                            <div class="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5">${Renderer.escape(m.snippet)}</div>
+                        </div>
+                    `;
+                });
+                searchResults.innerHTML = html;
+            });
         });
     </script>
 </body>
